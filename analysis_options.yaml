@@ -1,1 +1,47 @@
 include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    - always_declare_return_types
+    - always_put_control_body_on_new_line
+    - always_put_required_named_parameters_first
+    - annotate_overrides
+    - annotate_redeclares
+    - avoid_double_and_int_checks
+    - avoid_empty_else
+    - avoid_field_initializers_in_const_classes
+    - avoid_function_literals_in_foreach_calls
+    - avoid_init_to_null
+    - avoid_multiple_declarations_per_line
+    - avoid_relative_lib_imports
+    - avoid_renaming_method_parameters
+    - avoid_return_types_on_setters
+    - avoid_returning_null_for_void
+    - avoid_single_cascade_in_expression_statements
+    - avoid_types_on_closure_parameters
+    - cascade_invocations
+    - combinators_ordering
+    - curly_braces_in_flow_control_structures
+    - directives_ordering
+    - lines_longer_than_80_chars
+    - literal_only_boolean_expressions
+    - matching_super_parameters
+    - omit_local_variable_types
+    - prefer_asserts_in_initializer_lists
+    - prefer_asserts_with_message
+    - prefer_const_declarations
+    - prefer_double_quotes
+    - prefer_final_in_for_each
+    - prefer_final_locals
+    - prefer_int_literals
+    - require_trailing_commas
+    - sort_unnamed_constructors_first
+    - unnecessary_async
+    - unnecessary_parenthesis
+    - unnecessary_raw_strings
+    - use_colored_box
+    - use_decorated_box
+    - use_enums
+    - use_is_even_rather_than_modulo
+    - use_truncating_division
+    - use_string_in_part_of_directives
