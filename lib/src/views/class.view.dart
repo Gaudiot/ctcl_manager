@@ -1,10 +1,31 @@
 import "dart:async";
 
 import "package:ctcl_manager/base/uicolors.dart";
+import "package:ctcl_manager/src/models/class.viewmodel.dart";
 import "package:flutter/material.dart";
 
-class ClassListing extends StatelessWidget {
-  const ClassListing({super.key});
+class ClassListing extends StatefulWidget {
+  final ClassViewModel viewModel;
+
+  const ClassListing({required this.viewModel, super.key});
+
+  @override
+  State<ClassListing> createState() => _ClassListingState();
+}
+
+class _ClassListingState extends State<ClassListing> {
+  void _addClass() {
+    setState(() {
+      widget.viewModel.classes.add(
+        ClassSumary(
+          id: "x",
+          name: "Turma x",
+          local: "Local x",
+          studentsQuantity: 10,
+        ),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,17 +33,18 @@ class ClassListing extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClassViewHeader(),
+          ClassViewHeader(onAddClass: _addClass),
           Expanded(
             child: ListView.separated(
               padding: const EdgeInsets.all(16),
-              itemCount: 20,
+              itemCount: widget.viewModel.classes.length,
               itemBuilder: (context, index) {
+                final classSumary = widget.viewModel.classes[index];
                 return ClassCard(
-                  classId: "$index",
-                  className: "Class $index",
-                  local: "Local $index",
-                  studentsQuantity: index * 10,
+                  classId: classSumary.id,
+                  className: classSumary.name,
+                  local: classSumary.local,
+                  studentsQuantity: classSumary.studentsQuantity,
                 );
               },
               separatorBuilder: (context, index) {
@@ -37,7 +59,9 @@ class ClassListing extends StatelessWidget {
 }
 
 class ClassViewHeader extends StatelessWidget {
-  const ClassViewHeader({super.key});
+  final VoidCallback onAddClass;
+
+  const ClassViewHeader({required this.onAddClass, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +99,7 @@ class ClassViewHeader extends StatelessWidget {
               foregroundColor: UIColors.primaryWhite,
               shape: StadiumBorder(),
             ),
-            onPressed: () {
-              print("+ Turma");
-            },
+            onPressed: onAddClass,
             child: const Text("+ Turma"),
           ),
         ],
