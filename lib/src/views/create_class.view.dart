@@ -1,10 +1,43 @@
 import "package:ctcl_manager/base/uicolors.dart";
+import "package:ctcl_manager/src/views/bottomsheets/create_local.bottomsheet.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:intl/intl.dart";
 
-class CreateClassView extends StatelessWidget {
+class CreateClassView extends StatefulWidget {
   const CreateClassView({super.key});
+
+  @override
+  State<CreateClassView> createState() => _CreateClassViewState();
+}
+
+class _CreateClassViewState extends State<CreateClassView> {
+  String? _localId;
+  final List<DropdownMenuItem> _locals = [
+    DropdownMenuItem(value: "local1", child: Text("Local 1")),
+    DropdownMenuItem(value: "local2", child: Text("Local 2")),
+    DropdownMenuItem(value: "create", child: Text("Novo local")),
+  ];
+
+  void _setLocalId(String? id) {
+    setState(() {
+      _localId = id;
+    });
+  }
+
+  void _addLocal(String name) {
+    setState(() {
+      final newId = "${name}_${_locals.length + 1}";
+      _locals.add(
+        DropdownMenuItem(
+          value: newId,
+          child: Text("$name ${_locals.length + 1}"),
+        ),
+      );
+
+      _setLocalId(newId);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,18 +90,26 @@ class CreateClassView extends StatelessWidget {
                         style: TextStyle(color: UIColors.primaryGreyLight),
                       ),
                       isExpanded: true,
-                      items: [
-                        DropdownMenuItem(
-                          value: "local1",
-                          child: Text("Local 1"),
-                        ),
-                        DropdownMenuItem(
-                          value: "local2",
-                          child: Text("Local 2"),
-                        ),
-                      ],
+                      items: _locals,
+                      value: _localId,
                       onChanged: (value) {
-                        print(value);
+                        if (value == null) {
+                          return;
+                        }
+
+                        if (value == "create") {
+                          _setLocalId(null);
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) => CreateLocalBottomSheet(
+                              onCreateLocal: (name) {
+                                _addLocal(name);
+                              },
+                            ),
+                          );
+                          return;
+                        }
+                        _setLocalId(value);
                       },
                     ),
                   ),
@@ -85,8 +126,14 @@ class CreateClassView extends StatelessWidget {
                   child: TextButton(
                     onPressed: () {
                       showModalBottomSheet(
+                        backgroundColor: UIColors.primaryWhite,
                         context: context,
-                        builder: (context) => Text("teste"),
+                        builder: (context) => CreateLocalBottomSheet(
+                          onCreateLocal: (name) {
+                            _addLocal(name);
+                            _setLocalId(name);
+                          },
+                        ),
                       );
                     },
                     child: Text(
