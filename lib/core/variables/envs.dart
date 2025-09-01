@@ -1,7 +1,16 @@
 import "package:flutter/material.dart";
 import "package:flutter_dotenv/flutter_dotenv.dart";
 
-enum EnvsKeys { supabaseUrl, supabaseAnonKey }
+enum EnvsKeys {
+  supabaseUrl("SUPABASE_URL"),
+  supabaseAnonKey("SUPABASE_ANON_KEY");
+
+  final String _name;
+
+  const EnvsKeys(this._name);
+
+  String get name => _name;
+}
 
 class Envs {
   Envs._();
