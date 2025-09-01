@@ -1,3 +1,4 @@
+import "package:ctcl_manager/base/DAOs/local.dao.dart";
 import "package:ctcl_manager/base/uicolors.dart";
 import "package:flutter/material.dart";
 
@@ -58,7 +59,8 @@ class CreateLocalBottomSheet extends StatelessWidget {
             ),
             child: TextButton(
               onPressed: () {
-                onCreateLocal("nome do local");
+                onCreateLocal("local");
+                LocalDAO().addLocal("nome do local 3");
                 Navigator.pop(context);
               },
               child: Text(

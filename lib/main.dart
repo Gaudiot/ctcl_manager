@@ -1,9 +1,12 @@
-import "package:ctcl_manager/src/models/class.viewmodel.dart";
-import "package:ctcl_manager/src/views/class.view.dart";
+import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
+import "package:ctcl_manager/core/variables/envs.dart";
 import "package:ctcl_manager/src/views/create_class.view.dart";
 import "package:flutter/material.dart";
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Envs.initialize();
+  await SupabaseService.initialize();
   runApp(const MainApp());
 }
 

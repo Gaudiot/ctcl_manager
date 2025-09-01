@@ -18,7 +18,7 @@ enum SupabaseTables {
 class SupabaseService {
   SupabaseService._internal();
 
-  static void initialize() async {
+  static Future<void> initialize() async {
     final supabaseUrl = Envs.get(
       key: EnvsKeys.supabaseUrl,
       fallback: "SUA_SUPABASE_URL_AQUI",

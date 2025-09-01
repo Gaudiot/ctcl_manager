@@ -1,3 +1,4 @@
+import "package:ctcl_manager/base/DAOs/local.dao.dart";
 import "package:ctcl_manager/base/uicolors.dart";
 import "package:ctcl_manager/src/views/bottomsheets/create_local.bottomsheet.dart";
 import "package:flutter/material.dart";
@@ -13,11 +14,23 @@ class CreateClassView extends StatefulWidget {
 
 class _CreateClassViewState extends State<CreateClassView> {
   String? _localId;
-  final List<DropdownMenuItem> _locals = [
-    DropdownMenuItem(value: "local1", child: Text("Local 1")),
-    DropdownMenuItem(value: "local2", child: Text("Local 2")),
-    DropdownMenuItem(value: "create", child: Text("Novo local")),
-  ];
+  List<DropdownMenuItem> _locals = [];
+
+  @override
+  void initState() {
+    _setInitLocals();
+    super.initState();
+  }
+
+  Future<void> _setInitLocals() async {
+    final locals = await LocalDAO().getLocals();
+    _locals = locals
+        .map(
+          (local) => DropdownMenuItem(value: local.id, child: Text(local.name)),
+        )
+        .toList();
+    setState(() {});
+  }
 
   void _setLocalId(String? id) {
     setState(() {
@@ -26,17 +39,10 @@ class _CreateClassViewState extends State<CreateClassView> {
   }
 
   void _addLocal(String name) {
-    setState(() {
-      final newId = "${name}_${_locals.length + 1}";
-      _locals.add(
-        DropdownMenuItem(
-          value: newId,
-          child: Text("$name ${_locals.length + 1}"),
-        ),
-      );
+    final newId = "${name}_${_locals.length + 1}";
+    _locals.add(DropdownMenuItem(value: newId, child: Text(newId)));
 
-      _setLocalId(newId);
-    });
+    _setLocalId(newId);
   }
 
   @override
@@ -109,6 +115,7 @@ class _CreateClassViewState extends State<CreateClassView> {
                           );
                           return;
                         }
+
                         _setLocalId(value);
                       },
                     ),
@@ -131,7 +138,6 @@ class _CreateClassViewState extends State<CreateClassView> {
                         builder: (context) => CreateLocalBottomSheet(
                           onCreateLocal: (name) {
                             _addLocal(name);
-                            _setLocalId(name);
                           },
                         ),
                       );
@@ -156,7 +162,8 @@ class _CreateClassViewState extends State<CreateClassView> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      LocalDAO().getLocals();
+                      // Navigator.pop(context);
                     },
                     child: Text(
                       "Descartar",
