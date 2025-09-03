@@ -1,6 +1,7 @@
 import "dart:async";
 
 import "package:ctcl_manager/base/uicolors.dart";
+import "package:ctcl_manager/core/navigation/navigation.dart";
 import "package:ctcl_manager/src/models/class.viewmodel.dart";
 import "package:flutter/material.dart";
 
@@ -15,44 +16,37 @@ class ClassListing extends StatefulWidget {
 
 class _ClassListingState extends State<ClassListing> {
   void _addClass() {
-    setState(() {
-      widget.viewModel.classes.add(
-        ClassSumary(
-          id: "x",
-          name: "Turma x",
-          local: "Local x",
-          studentsQuantity: 10,
-        ),
-      );
-    });
+    NavigationManager.goTo(context, NavigationRoutes.createClass);
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClassViewHeader(onAddClass: _addClass),
-          Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: widget.viewModel.classes.length,
-              itemBuilder: (context, index) {
-                final classSumary = widget.viewModel.classes[index];
-                return ClassCard(
-                  classId: classSumary.id,
-                  className: classSumary.name,
-                  local: classSumary.local,
-                  studentsQuantity: classSumary.studentsQuantity,
-                );
-              },
-              separatorBuilder: (context, index) {
-                return SizedBox(height: 8);
-              },
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClassViewHeader(onAddClass: _addClass),
+            Expanded(
+              child: ListView.separated(
+                padding: const EdgeInsets.all(16),
+                itemCount: widget.viewModel.classes.length,
+                itemBuilder: (context, index) {
+                  final classSumary = widget.viewModel.classes[index];
+                  return ClassCard(
+                    classId: classSumary.id,
+                    className: classSumary.name,
+                    local: classSumary.local,
+                    studentsQuantity: classSumary.studentsQuantity,
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: 8);
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -81,9 +75,12 @@ class ClassViewHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            "Turmas",
-            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+          AppBar(
+            backgroundColor: Colors.transparent,
+            title: Text(
+              "Turmas",
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+            ),
           ),
           SizedBox(height: 16),
           SearchTextField(
