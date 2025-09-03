@@ -1,5 +1,6 @@
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
 import "package:ctcl_manager/base/uicolors.dart";
+import "package:ctcl_manager/core/navigation/navigation.dart";
 import "package:ctcl_manager/src/views/bottomsheets/create_local.bottomsheet.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
@@ -47,137 +48,138 @@ class _CreateClassViewState extends State<CreateClassView> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: [
-          CreateClassViewHeader(),
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.all(16),
-              children: [
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    labelText: "Nome da turma (*)",
-                    fillColor: UIColors.primaryWhiteDarker,
-                    filled: true,
-                  ),
-                ),
-                SizedBox(height: 16),
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    labelText: "Descrição",
-                    alignLabelWithHint: true,
-                    hintText: "Descrição da turma",
-                    fillColor: UIColors.primaryWhiteDarker,
-                    filled: true,
-                  ),
-                  minLines: 3,
-                  maxLines: 3,
-                ),
-                SizedBox(height: 16),
-                ValueTextField(),
-                SizedBox(height: 16),
-                DropdownButtonHideUnderline(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      color: UIColors.primaryWhiteDarker,
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: DropdownButton(
-                      hint: Text(
-                        "Selecione um local (*)",
-                        style: TextStyle(color: UIColors.primaryGreyLight),
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            CreateClassViewHeader(),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.all(16),
+                children: [
+                  TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
                       ),
-                      isExpanded: true,
-                      items: _locals,
-                      value: _localId,
-                      onChanged: (value) {
-                        if (value == null) {
-                          return;
-                        }
-
-                        if (value == "create") {
-                          _setLocalId(null);
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (context) => CreateLocalBottomSheet(
-                              onCreateLocal: (name) {
-                                _addLocal(name);
-                              },
-                            ),
-                          );
-                          return;
-                        }
-
-                        _setLocalId(value);
-                      },
+                      labelText: "Nome da turma (*)",
+                      fillColor: UIColors.primaryWhiteDarker,
+                      filled: true,
                     ),
                   ),
-                ),
-                SizedBox(height: 64),
-                Container(
-                  width: double.infinity,
-                  decoration: ShapeDecoration(
-                    color: UIColors.primaryOrange,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
+                  SizedBox(height: 16),
+                  TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      labelText: "Descrição",
+                      alignLabelWithHint: true,
+                      hintText: "Descrição da turma",
+                      fillColor: UIColors.primaryWhiteDarker,
+                      filled: true,
                     ),
+                    minLines: 3,
+                    maxLines: 3,
                   ),
-                  child: TextButton(
-                    onPressed: () {
-                      showModalBottomSheet(
-                        backgroundColor: UIColors.primaryWhite,
-                        context: context,
-                        builder: (context) => CreateLocalBottomSheet(
-                          onCreateLocal: (name) {
-                            _addLocal(name);
-                          },
+                  SizedBox(height: 16),
+                  ValueTextField(),
+                  SizedBox(height: 16),
+                  DropdownButtonHideUnderline(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: UIColors.primaryWhiteDarker,
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: DropdownButton(
+                        hint: Text(
+                          "Selecione um local (*)",
+                          style: TextStyle(color: UIColors.primaryGreyLight),
                         ),
-                      );
-                    },
-                    child: Text(
-                      "Criar Turma",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: UIColors.primaryBlack,
+                        isExpanded: true,
+                        items: _locals,
+                        value: _localId,
+                        onChanged: (value) {
+                          if (value == null) {
+                            return;
+                          }
+
+                          if (value == "create") {
+                            _setLocalId(null);
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) => CreateLocalBottomSheet(
+                                onCreateLocal: (name) {
+                                  _addLocal(name);
+                                },
+                              ),
+                            );
+                            return;
+                          }
+
+                          _setLocalId(value);
+                        },
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 8),
-                Container(
-                  width: double.infinity,
-                  decoration: ShapeDecoration(
-                    color: UIColors.primaryWhiteDarkest,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
+                  SizedBox(height: 64),
+                  Container(
+                    width: double.infinity,
+                    decoration: ShapeDecoration(
+                      color: UIColors.primaryOrange,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
                     ),
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      LocalDAO().getLocals();
-                      // Navigator.pop(context);
-                    },
-                    child: Text(
-                      "Descartar",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: UIColors.primaryBlack,
+                    child: TextButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          backgroundColor: UIColors.primaryWhite,
+                          context: context,
+                          builder: (context) => CreateLocalBottomSheet(
+                            onCreateLocal: (name) {
+                              _addLocal(name);
+                            },
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Criar Turma",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: UIColors.primaryBlack,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 8),
+                  Container(
+                    width: double.infinity,
+                    decoration: ShapeDecoration(
+                      color: UIColors.primaryWhiteDarkest,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        NavigationManager.pop(context);
+                      },
+                      child: Text(
+                        "Descartar",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: UIColors.primaryBlack,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -276,9 +278,12 @@ class CreateClassViewHeader extends StatelessWidget {
           ],
         ),
       ),
-      child: Text(
-        "Criar Turma",
-        style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+      child: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(
+          "Criar Turma",
+          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
