@@ -26,21 +26,9 @@ class NavigationManager {
           classes: [
             ClassSumary(
               id: "1",
-              name: "Turma 1",
-              local: "Local 1",
-              studentsQuantity: 10,
-            ),
-            ClassSumary(
-              id: "2",
-              name: "Turma 2",
-              local: "Local 2",
-              studentsQuantity: 20,
-            ),
-            ClassSumary(
-              id: "3",
-              name: "Turma 3",
-              local: "Local 3",
-              studentsQuantity: 30,
+              name: "Lorem ipsum",
+              local: "Dolorem sit amet",
+              studentsQuantity: 100,
             ),
           ],
         ),

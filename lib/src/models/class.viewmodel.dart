@@ -13,7 +13,7 @@ class ClassSumary {
 }
 
 class ClassViewModel {
-  final List<ClassSumary> classes;
+  List<ClassSumary> classes;
 
   ClassViewModel({required this.classes});
 }

@@ -50,10 +50,6 @@ final class LocalDAO {
         .map((e) => LocalModel(id: e["id"], name: e["name"]))
         .toList();
 
-    for (final local in locals) {
-      debugPrint("Local: ${local.toString()}");
-    }
-
     return locals;
   }
 }
