@@ -1,3 +1,4 @@
+import "package:ctcl_manager/base/DAOs/class.dao.dart";
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
 import "package:ctcl_manager/base/uicolors.dart";
 import "package:ctcl_manager/core/navigation/navigation.dart";
@@ -16,11 +17,21 @@ class CreateClassView extends StatefulWidget {
 class _CreateClassViewState extends State<CreateClassView> {
   String? _localId;
   List<DropdownMenuItem> _locals = [];
+  final TextEditingController _classNameController = TextEditingController();
+  final TextEditingController _classDescriptionController =
+      TextEditingController();
 
   @override
   void initState() {
     _setInitLocals();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _classNameController.dispose();
+    _classDescriptionController.dispose();
+    super.dispose();
   }
 
   Future<void> _setInitLocals() async {
@@ -46,6 +57,19 @@ class _CreateClassViewState extends State<CreateClassView> {
     _setLocalId(newId);
   }
 
+  Future<void> _addClass() async {
+    if (_localId == null) {
+      return;
+    }
+
+    await ClassDAO.addClass(
+      name: _classNameController.text,
+      valueHundred: 123456,
+      localId: _localId!,
+      description: _classDescriptionController.text,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,6 +82,7 @@ class _CreateClassViewState extends State<CreateClassView> {
                 padding: EdgeInsets.all(16),
                 children: [
                   TextField(
+                    controller: _classNameController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(4),
@@ -69,6 +94,7 @@ class _CreateClassViewState extends State<CreateClassView> {
                   ),
                   SizedBox(height: 16),
                   TextField(
+                    controller: _classDescriptionController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(4),
@@ -133,17 +159,7 @@ class _CreateClassViewState extends State<CreateClassView> {
                       ),
                     ),
                     child: TextButton(
-                      onPressed: () {
-                        showModalBottomSheet(
-                          backgroundColor: UIColors.primaryWhite,
-                          context: context,
-                          builder: (context) => CreateLocalBottomSheet(
-                            onCreateLocal: (name) {
-                              _addLocal(name);
-                            },
-                          ),
-                        );
-                      },
+                      onPressed: _addClass,
                       child: Text(
                         "Criar Turma",
                         style: TextStyle(

@@ -1,5 +1,6 @@
 import "dart:async";
 
+import "package:ctcl_manager/base/DAOs/class.dao.dart";
 import "package:ctcl_manager/base/uicolors.dart";
 import "package:ctcl_manager/core/navigation/navigation.dart";
 import "package:ctcl_manager/src/models/class.viewmodel.dart";
@@ -17,6 +18,28 @@ class ClassListing extends StatefulWidget {
 class _ClassListingState extends State<ClassListing> {
   void _addClass() {
     NavigationManager.goTo(context, NavigationRoutes.createClass);
+  }
+
+  Future<void> _getClassesSumary() async {
+    final classesSumary = await ClassDAO.getClassesSumary();
+    setState(() {
+      widget.viewModel.classes = classesSumary
+          .map(
+            (e) => ClassSumary(
+              id: e.id,
+              name: e.name,
+              local: e.localName,
+              studentsQuantity: e.studentsQuantity,
+            ),
+          )
+          .toList();
+    });
+  }
+
+  @override
+  void initState() {
+    _getClassesSumary();
+    super.initState();
   }
 
   @override
