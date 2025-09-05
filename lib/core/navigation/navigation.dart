@@ -43,7 +43,26 @@ class NavigationManager {
     }
   }
 
+  static void popWithConfirm(BuildContext context) {
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context, true);
+    }
+  }
+
   static void goTo(BuildContext context, NavigationRoutes route) {
     Navigator.pushNamed(context, route.path);
+  }
+
+  static Future<void> goAndCallBack(
+    BuildContext context,
+    NavigationRoutes route,
+    VoidCallback callback,
+  ) async {
+    Navigator.pushNamed(context, route.path).then((value) {
+      debugPrint("Value: $value");
+      if (value != null && value is bool && value) {
+        callback();
+      }
+    });
   }
 }

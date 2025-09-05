@@ -16,14 +16,25 @@ class ClassListing extends StatefulWidget {
 }
 
 class _ClassListingState extends State<ClassListing> {
-  void _addClass() {
-    NavigationManager.goTo(context, NavigationRoutes.createClass);
+  String _searchText = '';
+  List<ClassSumary> _allClasses = [];
+  List<ClassSumary> _filteredClasses = [];
+
+  Future<void> _addClass() async {
+    await NavigationManager.goAndCallBack(
+      context,
+      NavigationRoutes.createClass,
+      () {
+        debugPrint("Callback called");
+        _getClassesSumary();
+      },
+    );
   }
 
   Future<void> _getClassesSumary() async {
     final classesSumary = await ClassDAO.getClassesSumary();
     setState(() {
-      widget.viewModel.classes = classesSumary
+      _allClasses = classesSumary
           .map(
             (e) => ClassSumary(
               id: e.id,
@@ -33,6 +44,29 @@ class _ClassListingState extends State<ClassListing> {
             ),
           )
           .toList();
+      _filterClasses();
+    });
+  }
+
+  void _filterClasses() {
+    if (_searchText.isEmpty) {
+      _filteredClasses = List.from(_allClasses);
+    } else {
+      _filteredClasses = _allClasses
+          .where(
+            (classItem) => classItem.name.toLowerCase().contains(
+              _searchText.toLowerCase(),
+            ),
+          )
+          .toList();
+    }
+    widget.viewModel.classes = _filteredClasses;
+  }
+
+  void _onSearchChanged(String value) {
+    setState(() {
+      _searchText = value;
+      _filterClasses();
     });
   }
 
@@ -49,13 +83,16 @@ class _ClassListingState extends State<ClassListing> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClassViewHeader(onAddClass: _addClass),
+            ClassViewHeader(
+              onAddClass: _addClass,
+              onSearchChanged: _onSearchChanged,
+            ),
             Expanded(
               child: ListView.separated(
                 padding: const EdgeInsets.all(16),
-                itemCount: widget.viewModel.classes.length,
+                itemCount: _filteredClasses.length,
                 itemBuilder: (context, index) {
-                  final classSumary = widget.viewModel.classes[index];
+                  final classSumary = _filteredClasses[index];
                   return ClassCard(
                     classId: classSumary.id,
                     className: classSumary.name,
@@ -77,8 +114,13 @@ class _ClassListingState extends State<ClassListing> {
 
 class ClassViewHeader extends StatelessWidget {
   final VoidCallback onAddClass;
+  final Function(String) onSearchChanged;
 
-  const ClassViewHeader({required this.onAddClass, super.key});
+  const ClassViewHeader({
+    required this.onAddClass,
+    required this.onSearchChanged,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -106,12 +148,7 @@ class ClassViewHeader extends StatelessWidget {
             ),
           ),
           SizedBox(height: 16),
-          SearchTextField(
-            onSearch: (value) {
-              print(value);
-            },
-            searchTimeout: 300,
-          ),
+          SearchTextField(onSearch: onSearchChanged, searchTimeout: 100),
           SizedBox(height: 8),
           TextButton(
             style: TextButton.styleFrom(
