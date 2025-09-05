@@ -68,6 +68,8 @@ class _CreateClassViewState extends State<CreateClassView> {
       localId: _localId!,
       description: _classDescriptionController.text,
     );
+
+    NavigationManager.popWithConfirm(context);
   }
 
   @override
