@@ -1,13 +1,15 @@
-import "package:ctcl_manager/src/models/class.viewmodel.dart";
-import "package:ctcl_manager/src/views/class.view.dart";
+import "package:ctcl_manager/src/viewmodels/class_listing.viewmodel.dart";
+import "package:ctcl_manager/src/views/class_listing.view.dart";
 import "package:ctcl_manager/src/views/create_class.view.dart";
+import "package:ctcl_manager/src/views/viewstates/class_listing.viewstate.dart";
 import "package:flutter/material.dart";
 
 typedef RouteBuilder = Widget Function(BuildContext context);
 
 enum NavigationRoutes {
   createClass("/create_class"),
-  classListing("/class_listing");
+  classListing("/class_listing"),
+  classDetails("/class_details");
 
   final String path;
 
@@ -22,15 +24,8 @@ class NavigationManager {
   static Map<String, RouteBuilder> routesMap() {
     return {
       NavigationRoutes.classListing.path: (context) => ClassListing(
-        viewModel: ClassViewModel(
-          classes: [
-            ClassSumary(
-              id: "1",
-              name: "Lorem ipsum",
-              local: "Dolorem sit amet",
-              studentsQuantity: 100,
-            ),
-          ],
+        viewModel: ClassListingViewModel(
+          state: ClassListingViewState(classes: []),
         ),
       ),
       NavigationRoutes.createClass.path: (context) => CreateClassView(),

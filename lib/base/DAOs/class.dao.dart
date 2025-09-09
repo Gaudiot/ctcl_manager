@@ -1,25 +1,13 @@
+import "package:ctcl_manager/base/DAOs/errors/class.dao_error.dart";
+import "package:ctcl_manager/base/DAOs/models/class.dao_model.dart";
 import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
-import "package:flutter/material.dart";
+import "package:ctcl_manager/core/variables/result_type.dart";
 import "package:uuid/uuid.dart";
-
-final class ClassSumaryModel {
-  final String id;
-  final String name;
-  final String localName;
-  final int studentsQuantity;
-
-  ClassSumaryModel({
-    required this.id,
-    required this.name,
-    required this.localName,
-    required this.studentsQuantity,
-  });
-}
 
 final class ClassDAO {
   ClassDAO._internal();
 
-  static Future<void> addClass({
+  static Future<Result<void, ClassDAOError>> addClass({
     required String name,
     required int valueHundred,
     required String localId,
@@ -27,6 +15,8 @@ final class ClassDAO {
   }) async {
     final id = Uuid().v4();
     final timestamp = DateTime.now().toIso8601String();
+
+    ClassDAOError? daoError;
 
     SupabaseService.client
         .from(SupabaseTables.classes.name)
@@ -40,26 +30,40 @@ final class ClassDAO {
           "updated_at": timestamp,
         })
         .onError((error, stackTrace) {
-          debugPrint("Erro ao criar turma no Supabase:");
-          debugPrint("Erro: $error");
-          debugPrint("Stack trace: $stackTrace");
+          daoError = ClassDAOError(
+            message: "Error creating class in Supabase",
+            original: error,
+          );
         });
+
+    if (daoError != null) {
+      return Result.error(daoError);
+    }
+
+    return Result.ok(null);
   }
 
-  static Future<List<ClassSumaryModel>> getClassesSumary() async {
+  static Future<Result<List<ClassSumaryDAOModel>, ClassDAOError>>
+  getClassesSumary() async {
+    ClassDAOError? daoError;
     final response = await SupabaseService.client
         .from(SupabaseTables.classes.name)
         .select("id, name, local:locals(name), students:students(count)")
-        .onError((error, stackTrace) {
-          debugPrint("Erro ao buscar locais no Supabase:");
-          debugPrint("Erro: $error");
-          debugPrint("Stack trace: $stackTrace");
+        .onError((error, _) {
+          daoError = ClassDAOError(
+            message: "Error fetching classes from Supabase",
+            original: error,
+          );
           return [];
         });
 
+    if (daoError != null) {
+      return Result.error(daoError);
+    }
+
     final classes = response
         .map(
-          (e) => ClassSumaryModel(
+          (e) => ClassSumaryDAOModel(
             id: e["id"],
             name: e["name"],
             localName: e["local"]["name"],
@@ -68,6 +72,39 @@ final class ClassDAO {
         )
         .toList();
 
-    return classes;
+    return Result.ok(classes);
+  }
+
+  static Future<Result<List<ClassSumaryDAOModel>, ClassDAOError>>
+  getClassesSumaryByName(String name) async {
+    ClassDAOError? daoError;
+    final response = await SupabaseService.client
+        .from(SupabaseTables.classes.name)
+        .select("id, name, local:locals(name), students:students(count)")
+        .ilike("name", "%$name%")
+        .onError((error, _) {
+          daoError = ClassDAOError(
+            message: "Error fetching classes by name $name from Supabase",
+            original: error,
+          );
+          return [];
+        });
+
+    if (daoError != null) {
+      return Result.error(daoError);
+    }
+
+    final classes = response
+        .map(
+          (e) => ClassSumaryDAOModel(
+            id: e["id"],
+            name: e["name"],
+            localName: e["local"]["name"],
+            studentsQuantity: e["students"][0]["count"],
+          ),
+        )
+        .toList();
+
+    return Result.ok(classes);
   }
 }
