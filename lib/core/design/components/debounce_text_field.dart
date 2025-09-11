@@ -42,6 +42,7 @@ class _DebounceTextFieldState extends State<DebounceTextField> {
     return TextField(
       onChanged: _onDebounce,
       decoration: InputDecoration(
+        prefixIcon: Icon(Icons.search),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
         labelText: "Pesquisar",
         fillColor: UIColors.primaryWhite,

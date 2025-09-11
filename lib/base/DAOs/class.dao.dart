@@ -18,7 +18,7 @@ final class ClassDAO {
 
     ClassDAOError? daoError;
 
-    SupabaseService.client
+    await SupabaseService.client
         .from(SupabaseTables.classes.name)
         .insert({
           "id": id,

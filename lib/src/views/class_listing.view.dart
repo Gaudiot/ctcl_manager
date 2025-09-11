@@ -3,16 +3,16 @@ import "package:ctcl_manager/core/design/components/debounce_text_field.dart";
 import "package:ctcl_manager/src/viewmodels/class_listing.viewmodel.dart";
 import "package:flutter/material.dart";
 
-class ClassListing extends StatefulWidget {
+class ClassListingView extends StatefulWidget {
   final ClassListingViewModel viewModel;
 
-  const ClassListing({required this.viewModel, super.key});
+  const ClassListingView({required this.viewModel, super.key});
 
   @override
-  State<ClassListing> createState() => _ClassListingState();
+  State<ClassListingView> createState() => _ClassListingViewState();
 }
 
-class _ClassListingState extends State<ClassListing> {
+class _ClassListingViewState extends State<ClassListingView> {
   @override
   void initState() {
     widget.viewModel.getClasses();
