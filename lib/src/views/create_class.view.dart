@@ -104,6 +104,19 @@ class _CreateClassViewState extends State<CreateClassView> {
                           hasError: !widget.viewModel.state.localField.isValid,
                           errorMessage:
                               widget.viewModel.state.localField.errorMessage,
+                          onChanged: (value) {
+                            if (widget.viewModel.newLocalId == value) {
+                              classLocalController.value = null;
+                              widget.viewModel.goToCreateLocalBottomSheet(
+                                context,
+                                (localId) {
+                                  classLocalController.value = localId;
+                                },
+                              );
+                            } else {
+                              classLocalController.value = value;
+                            }
+                          },
                         ),
                         SizedBox(height: 16),
                         SizedBox(
@@ -146,12 +159,14 @@ class _LocalDropdown extends StatefulWidget {
   final ValueNotifier<String?> controller;
   final bool hasError;
   final String errorMessage;
+  final ValueChanged<String?>? onChanged;
 
   const _LocalDropdown({
     required this.locals,
     required this.controller,
     required this.hasError,
     required this.errorMessage,
+    this.onChanged,
   });
 
   @override
@@ -190,7 +205,7 @@ class _LocalDropdownState extends State<_LocalDropdown> {
                   )
                   .toList(),
               onChanged: (value) {
-                widget.controller.value = value;
+                widget.onChanged?.call(value);
                 setState(() {});
               },
             ),

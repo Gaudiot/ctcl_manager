@@ -43,7 +43,7 @@ final class ClassDAO {
     return Result.ok(null);
   }
 
-  static Future<Result<List<ClassSumaryDAOModel>, ClassDAOError>>
+  static Future<Result<List<ClassSummaryDAOModel>, ClassDAOError>>
   getClassesSumary() async {
     ClassDAOError? daoError;
     final response = await SupabaseService.client
@@ -63,7 +63,7 @@ final class ClassDAO {
 
     final classes = response
         .map(
-          (e) => ClassSumaryDAOModel(
+          (e) => ClassSummaryDAOModel(
             id: e["id"],
             name: e["name"],
             localName: e["local"]["name"],
@@ -75,7 +75,7 @@ final class ClassDAO {
     return Result.ok(classes);
   }
 
-  static Future<Result<List<ClassSumaryDAOModel>, ClassDAOError>>
+  static Future<Result<List<ClassSummaryDAOModel>, ClassDAOError>>
   getClassesSumaryByName(String name) async {
     ClassDAOError? daoError;
     final response = await SupabaseService.client
@@ -96,7 +96,7 @@ final class ClassDAO {
 
     final classes = response
         .map(
-          (e) => ClassSumaryDAOModel(
+          (e) => ClassSummaryDAOModel(
             id: e["id"],
             name: e["name"],
             localName: e["local"]["name"],

@@ -1,10 +1,10 @@
-final class ClassSumaryDAOModel {
+final class ClassSummaryDAOModel {
   final String id;
   final String name;
   final String localName;
   final int studentsQuantity;
 
-  ClassSumaryDAOModel({
+  ClassSummaryDAOModel({
     required this.id,
     required this.name,
     required this.localName,
