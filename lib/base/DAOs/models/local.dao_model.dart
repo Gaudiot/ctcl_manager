@@ -1,6 +1,6 @@
-final class LocalSumaryDAOModel {
+final class LocalSummaryDAOModel {
   final String id;
   final String name;
 
-  LocalSumaryDAOModel({required this.id, required this.name});
+  LocalSummaryDAOModel({required this.id, required this.name});
 }

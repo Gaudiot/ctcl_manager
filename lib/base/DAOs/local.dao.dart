@@ -1,19 +1,16 @@
 import "package:ctcl_manager/base/DAOs/errors/local.dao_error.dart";
+import "package:ctcl_manager/base/DAOs/models/local.dao_model.dart";
 import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
 import "package:ctcl_manager/core/variables/result_type.dart";
+import "package:flutter/foundation.dart";
 import "package:uuid/uuid.dart";
-
-final class LocalModel {
-  final String id;
-  final String name;
-
-  LocalModel({required this.id, required this.name});
-}
 
 final class LocalDAO {
   LocalDAO._internal();
 
-  static Future<Result<void, LocalDAOError>> addLocal(String name) async {
+  static Future<Result<LocalSummaryDAOModel, LocalDAOError>> addLocal(
+    String name,
+  ) async {
     final id = Uuid().v4();
     final timestamp = DateTime.now().toIso8601String();
 
@@ -38,10 +35,11 @@ final class LocalDAO {
       return Result.error(daoError);
     }
 
-    return Result.ok(null);
+    return Result.ok(LocalSummaryDAOModel(id: id, name: name));
   }
 
-  static Future<Result<List<LocalModel>, LocalDAOError>> getLocals() async {
+  static Future<Result<List<LocalSummaryDAOModel>, LocalDAOError>>
+  getLocals() async {
     LocalDAOError? daoError;
 
     final response = await SupabaseService.client
@@ -60,7 +58,9 @@ final class LocalDAO {
     }
 
     final locals = response
-        .map((local) => LocalModel(id: local["id"], name: local["name"]))
+        .map(
+          (local) => LocalSummaryDAOModel(id: local["id"], name: local["name"]),
+        )
         .toList();
 
     return Result.ok(locals);

@@ -1,6 +1,7 @@
 import "package:ctcl_manager/base/DAOs/class.dao.dart";
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
 import "package:ctcl_manager/core/navigation/navigation.dart";
+import "package:ctcl_manager/src/views/bottomsheets/create_local.bottomsheet.dart";
 import "package:ctcl_manager/src/views/viewstates/create_class.viewstate.dart";
 import "package:flutter/material.dart";
 
@@ -8,6 +9,8 @@ final class CreateClassViewModel {
   final CreateClassViewState state;
 
   CreateClassViewModel({required this.state});
+
+  String get newLocalId => "new_local";
 
   // MARK: - Fetch Data
 
@@ -21,7 +24,7 @@ final class CreateClassViewModel {
             .map((local) => LocalSumary(id: local.id, name: local.name))
             .toList();
         final newLocals = <LocalSumary>[
-          LocalSumary(id: "new_local", name: "Novo Local"),
+          LocalSumary(id: newLocalId, name: "Novo Local"),
           ...fetchedLocals,
         ];
         state.locals = newLocals;
@@ -89,5 +92,21 @@ final class CreateClassViewModel {
     NavigationManager.pop(context);
   }
 
-  void goToCreateLocalBottomSheet(BuildContext context) {}
+  void goToCreateLocalBottomSheet(
+    BuildContext context,
+    ValueChanged<String> onLocalCreated,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return CreateLocalBottomSheet(
+          onCreateLocal: ({required id, required name}) {
+            state.addLocal(LocalSumary(id: id, name: name));
+            onLocalCreated(id);
+            state.notifyListeners();
+          },
+        );
+      },
+    );
+  }
 }

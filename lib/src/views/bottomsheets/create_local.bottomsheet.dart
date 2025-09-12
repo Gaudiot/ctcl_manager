@@ -1,11 +1,13 @@
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
 import "package:ctcl_manager/base/uicolors.dart";
+import "package:ctcl_manager/core/navigation/navigation.dart";
 import "package:flutter/material.dart";
 
 class CreateLocalBottomSheet extends StatelessWidget {
-  final Function(String) onCreateLocal;
+  final void Function({required String id, required String name}) onCreateLocal;
+  final TextEditingController nameController = TextEditingController();
 
-  const CreateLocalBottomSheet({required this.onCreateLocal, super.key});
+  CreateLocalBottomSheet({required this.onCreateLocal, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class CreateLocalBottomSheet extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  Navigator.pop(context);
+                  NavigationManager.pop(context);
                 },
                 child: Icon(Icons.cancel_outlined, size: 32),
               ),
@@ -41,6 +43,7 @@ class CreateLocalBottomSheet extends StatelessWidget {
           ),
           SizedBox(height: 16),
           TextField(
+            controller: nameController,
             decoration: InputDecoration(
               labelText: "Nome do local (*)",
               border: OutlineInputBorder(
@@ -53,19 +56,24 @@ class CreateLocalBottomSheet extends StatelessWidget {
             width: double.infinity,
             decoration: ShapeDecoration(
               color: UIColors.primaryOrange,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
+              shape: StadiumBorder(side: BorderSide.none),
             ),
             child: TextButton(
-              onPressed: () {
-                onCreateLocal("local");
-                LocalDAO.addLocal("nome do local 3");
-                Navigator.pop(context);
+              onPressed: () async {
+                final name = nameController.text;
+                final result = await LocalDAO.addLocal(name);
+
+                result.when(
+                  onOk: (local) {
+                    onCreateLocal(id: local.id, name: local.name);
+                    NavigationManager.pop(context);
+                  },
+                );
               },
+              style: TextButton.styleFrom(shape: StadiumBorder()),
               child: Text(
                 "Criar Local",
-                style: TextStyle(fontSize: 16, color: UIColors.primaryBlack),
+                style: TextStyle(fontSize: 16, color: UIColors.primaryWhite),
               ),
             ),
           ),
