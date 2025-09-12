@@ -1,5 +1,6 @@
+import "package:ctcl_manager/base/DAOs/errors/local.dao_error.dart";
 import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
-import "package:flutter/widgets.dart";
+import "package:ctcl_manager/core/variables/result_type.dart";
 import "package:uuid/uuid.dart";
 
 final class LocalModel {
@@ -10,13 +11,15 @@ final class LocalModel {
 }
 
 final class LocalDAO {
-  Future<void> addLocal(String name) async {
+  LocalDAO._internal();
+
+  static Future<Result<void, LocalDAOError>> addLocal(String name) async {
     final id = Uuid().v4();
     final timestamp = DateTime.now().toIso8601String();
 
-    debugPrint("Adding local to supabase: $name");
+    LocalDAOError? daoError;
 
-    final response = await SupabaseService.client
+    await SupabaseService.client
         .from(SupabaseTables.locals.name)
         .insert({
           "id": id,
@@ -24,32 +27,42 @@ final class LocalDAO {
           "created_at": timestamp,
           "updated_at": timestamp,
         })
-        .select()
         .onError((error, stackTrace) {
-          debugPrint("Erro ao adicionar local no Supabase:");
-          debugPrint("Erro: $error");
-          debugPrint("Stack trace: $stackTrace");
-          return [];
+          daoError = LocalDAOError(
+            message: "Error creating local in Supabase",
+            original: error,
+          );
         });
 
-    debugPrint("Local adicionado com sucesso: $response");
+    if (daoError != null) {
+      return Result.error(daoError);
+    }
+
+    return Result.ok(null);
   }
 
-  Future<List<LocalModel>> getLocals() async {
+  static Future<Result<List<LocalModel>, LocalDAOError>> getLocals() async {
+    LocalDAOError? daoError;
+
     final response = await SupabaseService.client
         .from(SupabaseTables.locals.name)
         .select("id, name")
         .onError((error, stackTrace) {
-          debugPrint("Erro ao buscar locais no Supabase:");
-          debugPrint("Erro: $error");
-          debugPrint("Stack trace: $stackTrace");
+          daoError = LocalDAOError(
+            message: "Error fetching locals from Supabase",
+            original: error,
+          );
           return [];
         });
 
+    if (daoError != null) {
+      return Result.error(daoError);
+    }
+
     final locals = response
-        .map((e) => LocalModel(id: e["id"], name: e["name"]))
+        .map((local) => LocalModel(id: local["id"], name: local["name"]))
         .toList();
 
-    return locals;
+    return Result.ok(locals);
   }
 }

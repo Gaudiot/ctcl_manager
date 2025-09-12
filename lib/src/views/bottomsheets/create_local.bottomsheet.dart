@@ -60,7 +60,7 @@ class CreateLocalBottomSheet extends StatelessWidget {
             child: TextButton(
               onPressed: () {
                 onCreateLocal("local");
-                LocalDAO().addLocal("nome do local 3");
+                LocalDAO.addLocal("nome do local 3");
                 Navigator.pop(context);
               },
               child: Text(
