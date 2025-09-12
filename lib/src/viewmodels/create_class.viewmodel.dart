@@ -80,7 +80,7 @@ final class CreateClassViewModel {
 
     response.when(
       onOk: (data) {
-        NavigationManager.pop(context);
+        NavigationManager.popWithConfirm(context);
       },
       onError: (error) {},
     );

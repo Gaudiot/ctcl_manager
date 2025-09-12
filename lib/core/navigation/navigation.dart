@@ -54,7 +54,7 @@ class NavigationManager {
     Navigator.pushNamed(context, route.path);
   }
 
-  static Future<void> goAndCallBack(
+  static Future<void> goToAndCallBack(
     BuildContext context,
     NavigationRoutes route,
     VoidCallback callback,

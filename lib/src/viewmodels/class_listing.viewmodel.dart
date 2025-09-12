@@ -67,6 +67,12 @@ class ClassListingViewModel {
   }
 
   void goToCreateClass(BuildContext context) {
-    NavigationManager.goTo(context, NavigationRoutes.createClass);
+    NavigationManager.goToAndCallBack(
+      context,
+      NavigationRoutes.createClass,
+      () {
+        getClasses();
+      },
+    );
   }
 }
