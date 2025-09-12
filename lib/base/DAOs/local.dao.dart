@@ -2,7 +2,6 @@ import "package:ctcl_manager/base/DAOs/errors/local.dao_error.dart";
 import "package:ctcl_manager/base/DAOs/models/local.dao_model.dart";
 import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
 import "package:ctcl_manager/core/variables/result_type.dart";
-import "package:flutter/foundation.dart";
 import "package:uuid/uuid.dart";
 
 final class LocalDAO {
