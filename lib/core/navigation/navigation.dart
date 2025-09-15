@@ -1,5 +1,7 @@
+import "package:ctcl_manager/src/viewmodels/class_details.viewmodel.dart";
 import "package:ctcl_manager/src/viewmodels/class_listing.viewmodel.dart";
 import "package:ctcl_manager/src/viewmodels/create_class.viewmodel.dart";
+import "package:ctcl_manager/src/views/class_details.view.dart";
 import "package:ctcl_manager/src/views/class_listing.view.dart";
 import "package:ctcl_manager/src/views/create_class.view.dart";
 import "package:ctcl_manager/src/views/viewstates/class_listing.viewstate.dart";
@@ -22,6 +24,7 @@ class NavigationManager {
   NavigationManager._internal();
 
   static String initialRoute = NavigationRoutes.classListing.path;
+  static var _args = <String, dynamic>{};
 
   static Map<String, RouteBuilder> routesMap() {
     return {
@@ -35,6 +38,16 @@ class NavigationManager {
           state: CreateClassViewState(locals: []),
         ),
       ),
+      NavigationRoutes.classDetails.path: (context) {
+        final classId = _args.containsKey("classId")
+            ? _args["classId"]
+            : "falhou";
+
+        return ClassDetailsView(
+          classId: classId,
+          viewModel: ClassDetailsViewModel(),
+        );
+      },
     };
   }
 
@@ -50,15 +63,22 @@ class NavigationManager {
     }
   }
 
-  static void goTo(BuildContext context, NavigationRoutes route) {
+  static void goTo(
+    BuildContext context,
+    NavigationRoutes route, {
+    Map<String, String>? args,
+  }) {
+    _args = args ?? {};
     Navigator.pushNamed(context, route.path);
   }
 
   static Future<void> goToAndCallBack(
     BuildContext context,
     NavigationRoutes route,
-    VoidCallback callback,
-  ) async {
+    VoidCallback callback, {
+    Map<String, String>? args,
+  }) async {
+    _args = args ?? {};
     Navigator.pushNamed(context, route.path).then((value) {
       debugPrint("Value: $value");
       if (value != null && value is bool && value) {

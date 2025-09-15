@@ -22,16 +22,16 @@ class _ClassListingViewState extends State<ClassListingView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Turmas",
+          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: UIColors.primaryOrangeLighter,
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            AppBar(
-              title: Text(
-                "Turmas",
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-              ),
-              backgroundColor: UIColors.primaryOrangeLighter,
-            ),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -85,7 +85,7 @@ class _ClassListingViewState extends State<ClassListingView> {
                   child: ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: state.classes.length,
-                    itemBuilder: (_, index) => _ClassSumaryCard(
+                    itemBuilder: (_, index) => _ClassSummaryCard(
                       classId: state.classes[index].id,
                       className: state.classes[index].name,
                       local: state.classes[index].local,
@@ -109,14 +109,14 @@ class _ClassListingViewState extends State<ClassListingView> {
 
 //MARK: - Components
 
-final class _ClassSumaryCard extends StatelessWidget {
+final class _ClassSummaryCard extends StatelessWidget {
   final String classId;
   final String className;
   final String local;
   final int studentsQuantity;
   final VoidCallback onTap;
 
-  const _ClassSumaryCard({
+  const _ClassSummaryCard({
     required this.classId,
     required this.className,
     required this.local,

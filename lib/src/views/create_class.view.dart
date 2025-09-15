@@ -36,16 +36,16 @@ class _CreateClassViewState extends State<CreateClassView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Criar Turma",
+          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: UIColors.primaryOrangeLighter,
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            AppBar(
-              title: Text(
-                "Criar Turma",
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-              ),
-              backgroundColor: UIColors.primaryOrangeLighter,
-            ),
             Container(
               width: double.infinity,
               height: 30,
@@ -61,88 +61,84 @@ class _CreateClassViewState extends State<CreateClassView> {
               ),
             ),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: ListenableBuilder(
-                  listenable: widget.viewModel.state,
-                  builder: (context, snapshot) {
-                    return ListView(
-                      children: [
-                        TextField(
-                          controller: classNameController,
-                          decoration: InputDecoration(
-                            labelText: "Nome da turma",
-                            hintText: "Nome da turma",
-                            border: OutlineInputBorder(),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: UIColors.primaryRed,
-                              ),
-                            ),
-                            errorText: widget.viewModel.state.nameField.isValid
-                                ? null
-                                : widget.viewModel.state.nameField.errorMessage,
+              child: ListenableBuilder(
+                listenable: widget.viewModel.state,
+                builder: (context, snapshot) {
+                  return ListView(
+                    padding: EdgeInsets.all(16),
+                    children: [
+                      TextField(
+                        controller: classNameController,
+                        decoration: InputDecoration(
+                          labelText: "Nome da turma",
+                          hintText: "Nome da turma",
+                          border: OutlineInputBorder(),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: UIColors.primaryRed),
                           ),
+                          errorText: widget.viewModel.state.nameField.isValid
+                              ? null
+                              : widget.viewModel.state.nameField.errorMessage,
                         ),
-                        SizedBox(height: 16),
-                        TextField(
-                          controller: classDescriptionController,
-                          minLines: 3,
-                          maxLines: 3,
-                          decoration: InputDecoration(
-                            labelText: "Descrição da turma",
-                            hintText: "Descrição da turma",
-                            border: OutlineInputBorder(),
+                      ),
+                      SizedBox(height: 16),
+                      TextField(
+                        controller: classDescriptionController,
+                        minLines: 3,
+                        maxLines: 3,
+                        decoration: InputDecoration(
+                          labelText: "Descrição da turma",
+                          hintText: "Descrição da turma",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      MonetaryTextField(valueObserver: classValueController),
+                      SizedBox(height: 16),
+                      _LocalDropdown(
+                        locals: widget.viewModel.state.locals,
+                        controller: classLocalController,
+                        hasError: !widget.viewModel.state.localField.isValid,
+                        errorMessage:
+                            widget.viewModel.state.localField.errorMessage,
+                        onChanged: (value) {
+                          if (widget.viewModel.newLocalId == value) {
+                            classLocalController.value = null;
+                            widget.viewModel.goToCreateLocalBottomSheet(
+                              context,
+                              (localId) {
+                                classLocalController.value = localId;
+                              },
+                            );
+                          } else {
+                            classLocalController.value = value;
+                          }
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      SizedBox(
+                        width: 300,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: UIColors.primaryOrange,
+                            foregroundColor: UIColors.primaryWhite,
+                            shape: StadiumBorder(),
                           ),
-                        ),
-                        SizedBox(height: 16),
-                        MonetaryTextField(valueObserver: classValueController),
-                        SizedBox(height: 16),
-                        _LocalDropdown(
-                          locals: widget.viewModel.state.locals,
-                          controller: classLocalController,
-                          hasError: !widget.viewModel.state.localField.isValid,
-                          errorMessage:
-                              widget.viewModel.state.localField.errorMessage,
-                          onChanged: (value) {
-                            if (widget.viewModel.newLocalId == value) {
-                              classLocalController.value = null;
-                              widget.viewModel.goToCreateLocalBottomSheet(
-                                context,
-                                (localId) {
-                                  classLocalController.value = localId;
-                                },
-                              );
-                            } else {
-                              classLocalController.value = value;
-                            }
+                          onPressed: () {
+                            widget.viewModel.createClass(
+                              context: context,
+                              name: classNameController.text,
+                              description: classDescriptionController.text,
+                              valueHundred: classValueController.value,
+                              localId: classLocalController.value ?? "",
+                            );
                           },
+                          child: const Text("Criar Turma"),
                         ),
-                        SizedBox(height: 16),
-                        SizedBox(
-                          width: 300,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              backgroundColor: UIColors.primaryOrange,
-                              foregroundColor: UIColors.primaryWhite,
-                              shape: StadiumBorder(),
-                            ),
-                            onPressed: () {
-                              widget.viewModel.createClass(
-                                context: context,
-                                name: classNameController.text,
-                                description: classDescriptionController.text,
-                                valueHundred: classValueController.value,
-                                localId: classLocalController.value ?? "",
-                              );
-                            },
-                            child: const Text("Criar Turma"),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ],
@@ -155,7 +151,7 @@ class _CreateClassViewState extends State<CreateClassView> {
 //MARK: - Components
 
 class _LocalDropdown extends StatefulWidget {
-  final List<LocalSumary> locals;
+  final List<LocalSummary> locals;
   final ValueNotifier<String?> controller;
   final bool hasError;
   final String errorMessage;
