@@ -1,10 +1,10 @@
 import "package:ctcl_manager/src/views/viewstates/base_viewstate.dart";
 
-class LocalSumary {
+final class LocalSummary {
   final String id;
   final String name;
 
-  LocalSumary({required this.id, required this.name});
+  const LocalSummary({required this.id, required this.name});
 }
 
 class CreateClassFieldState {
@@ -15,7 +15,7 @@ class CreateClassFieldState {
 }
 
 final class CreateClassViewState extends BaseViewState {
-  List<LocalSumary> locals;
+  List<LocalSummary> locals;
   CreateClassFieldState nameField = CreateClassFieldState(
     errorMessage: "Nome não pode ser vazio",
   );
@@ -28,7 +28,7 @@ final class CreateClassViewState extends BaseViewState {
 
   CreateClassViewState({required this.locals});
 
-  void addLocal(LocalSumary local) {
+  void addLocal(LocalSummary local) {
     locals.add(local);
     notifyListeners();
   }

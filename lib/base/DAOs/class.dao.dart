@@ -7,6 +7,8 @@ import "package:uuid/uuid.dart";
 final class ClassDAO {
   ClassDAO._internal();
 
+  // MARK: - Create
+
   static Future<Result<void, ClassDAOError>> addClass({
     required String name,
     required int valueHundred,
@@ -42,6 +44,8 @@ final class ClassDAO {
 
     return Result.ok(null);
   }
+
+  // MARKL - Read
 
   static Future<Result<List<ClassSummaryDAOModel>, ClassDAOError>>
   getClassesSumary() async {
@@ -106,5 +110,73 @@ final class ClassDAO {
         .toList();
 
     return Result.ok(classes);
+  }
+
+  static Future<Result<ClassDAOModel, ClassDAOError>> getClassById(
+    String id,
+  ) async {
+    ClassDAOError? daoError;
+    final response = await SupabaseService.client
+        .from(SupabaseTables.classes.name)
+        .select(
+          "id, name, description, value_hundred, local_id, local:locals(name)",
+        )
+        .eq("id", id)
+        .onError((error, _) {
+          daoError = ClassDAOError(
+            message: "Error fetching class from Supabase",
+            original: error,
+          );
+          return [];
+        });
+
+    if (daoError != null) {
+      return Result.error(daoError);
+    }
+
+    return Result.ok(
+      ClassDAOModel(
+        id: response[0]["id"],
+        name: response[0]["name"],
+        description: response[0]["description"],
+        valueHundred: response[0]["value_hundred"],
+        localId: response[0]["local_id"],
+        localName: response[0]["local"]["name"],
+      ),
+    );
+  }
+
+  // MARK: - Update
+
+  static Future<Result<void, ClassDAOError>> update(
+    String id,
+    String name,
+    String description,
+    int valueHundred,
+    String localId,
+  ) async {
+    return Result.ok(null);
+  }
+
+  // MARK: - Delete
+
+  static Future<Result<void, ClassDAOError>> delete(String id) async {
+    ClassDAOError? daoError;
+    await SupabaseService.client
+        .from(SupabaseTables.classes.name)
+        .delete()
+        .eq("id", id)
+        .onError((error, _) {
+          daoError = ClassDAOError(
+            message: "Error deleting class from Supabase",
+            original: error,
+          );
+        });
+
+    if (daoError != null) {
+      return Result.error(daoError);
+    }
+
+    return Result.ok(null);
   }
 }

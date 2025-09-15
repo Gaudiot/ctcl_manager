@@ -21,10 +21,10 @@ final class CreateClassViewModel {
     locals.when(
       onOk: (locals) {
         final fetchedLocals = locals
-            .map((local) => LocalSumary(id: local.id, name: local.name))
+            .map((local) => LocalSummary(id: local.id, name: local.name))
             .toList();
-        final newLocals = <LocalSumary>[
-          LocalSumary(id: newLocalId, name: "Novo Local"),
+        final newLocals = <LocalSummary>[
+          LocalSummary(id: newLocalId, name: "Novo Local"),
           ...fetchedLocals,
         ];
         state.locals = newLocals;
@@ -101,7 +101,7 @@ final class CreateClassViewModel {
       builder: (context) {
         return CreateLocalBottomSheet(
           onCreateLocal: ({required id, required name}) {
-            state.addLocal(LocalSumary(id: id, name: name));
+            state.addLocal(LocalSummary(id: id, name: name));
             onLocalCreated(id);
             state.notifyListeners();
           },

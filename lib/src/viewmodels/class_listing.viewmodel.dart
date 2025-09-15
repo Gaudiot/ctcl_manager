@@ -14,8 +14,6 @@ class ClassListingViewModel {
     state.isLoading = true;
     final classes = await ClassDAO.getClassesSumary();
 
-    await Future.delayed(const Duration(seconds: 2));
-
     classes.when(
       onOk: (classes) {
         state.classes = classes
@@ -63,7 +61,11 @@ class ClassListingViewModel {
   //MARK: - Navigation
 
   void goToClassDetails(BuildContext context, String classId) {
-    // NavigationManager.goTo(context, NavigationRoutes.classDetails);
+    NavigationManager.goTo(
+      context,
+      NavigationRoutes.classDetails,
+      args: {"classId": classId},
+    );
   }
 
   void goToCreateClass(BuildContext context) {

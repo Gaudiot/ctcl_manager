@@ -7,6 +7,8 @@ import "package:uuid/uuid.dart";
 final class LocalDAO {
   LocalDAO._internal();
 
+  // MARK: - Create
+
   static Future<Result<LocalSummaryDAOModel, LocalDAOError>> addLocal(
     String name,
   ) async {
@@ -36,6 +38,8 @@ final class LocalDAO {
 
     return Result.ok(LocalSummaryDAOModel(id: id, name: name));
   }
+
+  // MARK: - Read
 
   static Future<Result<List<LocalSummaryDAOModel>, LocalDAOError>>
   getLocals() async {
