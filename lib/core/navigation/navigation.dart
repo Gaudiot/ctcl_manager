@@ -4,6 +4,7 @@ import "package:ctcl_manager/src/viewmodels/create_class.viewmodel.dart";
 import "package:ctcl_manager/src/views/class_details.view.dart";
 import "package:ctcl_manager/src/views/class_listing.view.dart";
 import "package:ctcl_manager/src/views/create_class.view.dart";
+import "package:ctcl_manager/src/views/viewstates/class_details.viewstate.dart";
 import "package:ctcl_manager/src/views/viewstates/class_listing.viewstate.dart";
 import "package:ctcl_manager/src/views/viewstates/create_class.viewstate.dart";
 import "package:flutter/material.dart";
@@ -45,7 +46,9 @@ class NavigationManager {
 
         return ClassDetailsView(
           classId: classId,
-          viewModel: ClassDetailsViewModel(),
+          viewModel: ClassDetailsViewModel(
+            state: ClassDetailsViewState.empty(),
+          ),
         );
       },
     };
@@ -80,7 +83,6 @@ class NavigationManager {
   }) async {
     _args = args ?? {};
     Navigator.pushNamed(context, route.path).then((value) {
-      debugPrint("Value: $value");
       if (value != null && value is bool && value) {
         callback();
       }
