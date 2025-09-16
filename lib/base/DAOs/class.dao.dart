@@ -45,7 +45,7 @@ final class ClassDAO {
     return Result.ok(null);
   }
 
-  // MARKL - Read
+  // MARK: - Read
 
   static Future<Result<List<ClassSummaryDAOModel>, ClassDAOError>>
   getClassesSumary() async {
@@ -155,6 +155,27 @@ final class ClassDAO {
     int valueHundred,
     String localId,
   ) async {
+    ClassDAOError? daoError;
+    await SupabaseService.client
+        .from(SupabaseTables.classes.name)
+        .update({
+          "name": name,
+          "description": description,
+          "value_hundred": valueHundred,
+          "local_id": localId,
+        })
+        .eq("id", id)
+        .onError((error, _) {
+          daoError = ClassDAOError(
+            message: "Error updating class from Supabase",
+            original: error,
+          );
+        });
+
+    if (daoError != null) {
+      return Result.error(daoError);
+    }
+
     return Result.ok(null);
   }
 

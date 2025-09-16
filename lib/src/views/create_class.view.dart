@@ -1,7 +1,7 @@
+import "package:ctcl_manager/base/components/locals_dropdown.dart";
 import "package:ctcl_manager/base/uicolors.dart";
 import "package:ctcl_manager/core/design/components/monetary_text_field.dart";
 import "package:ctcl_manager/src/viewmodels/create_class.viewmodel.dart";
-import "package:ctcl_manager/src/views/viewstates/create_class.viewstate.dart";
 import "package:flutter/material.dart";
 
 class CreateClassView extends StatefulWidget {
@@ -95,25 +95,10 @@ class _CreateClassViewState extends State<CreateClassView> {
                       SizedBox(height: 16),
                       MonetaryTextField(controller: classValueController),
                       SizedBox(height: 16),
-                      _LocalDropdown(
-                        locals: widget.viewModel.state.locals,
+                      LocalsDropdown(
                         controller: classLocalController,
-                        hasError: !widget.viewModel.state.localField.isValid,
                         errorMessage:
                             widget.viewModel.state.localField.errorMessage,
-                        onChanged: (value) {
-                          if (widget.viewModel.newLocalId == value) {
-                            classLocalController.value = null;
-                            widget.viewModel.goToCreateLocalBottomSheet(
-                              context,
-                              (localId) {
-                                classLocalController.value = localId;
-                              },
-                            );
-                          } else {
-                            classLocalController.value = value;
-                          }
-                        },
                       ),
                       SizedBox(height: 16),
                       SizedBox(
@@ -144,72 +129,6 @@ class _CreateClassViewState extends State<CreateClassView> {
           ],
         ),
       ),
-    );
-  }
-}
-
-//MARK: - Components
-
-class _LocalDropdown extends StatefulWidget {
-  final List<LocalSummary> locals;
-  final ValueNotifier<String?> controller;
-  final bool hasError;
-  final String errorMessage;
-  final ValueChanged<String?>? onChanged;
-
-  const _LocalDropdown({
-    required this.locals,
-    required this.controller,
-    required this.hasError,
-    required this.errorMessage,
-    this.onChanged,
-  });
-
-  @override
-  State<_LocalDropdown> createState() => _LocalDropdownState();
-}
-
-class _LocalDropdownState extends State<_LocalDropdown> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(4),
-            border: Border.all(
-              color: widget.hasError
-                  ? UIColors.primaryRed
-                  : UIColors.primaryGreyDarker,
-            ),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton(
-              value: widget.controller.value,
-              hint: Text("Selecione um local"),
-              items: widget.locals
-                  .map(
-                    (local) => DropdownMenuItem(
-                      value: local.id,
-                      child: Text(local.name),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (value) {
-                widget.onChanged?.call(value);
-                setState(() {});
-              },
-            ),
-          ),
-        ),
-        if (widget.hasError)
-          Text(widget.errorMessage, style: TextStyle(color: Colors.red)),
-      ],
     );
   }
 }

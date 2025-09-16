@@ -61,9 +61,12 @@ class ClassListingViewModel {
   //MARK: - Navigation
 
   void goToClassDetails(BuildContext context, String classId) {
-    NavigationManager.goTo(
+    NavigationManager.goToAndCallBack(
       context,
       NavigationRoutes.classDetails,
+      () {
+        getClasses();
+      },
       args: {"classId": classId},
     );
   }

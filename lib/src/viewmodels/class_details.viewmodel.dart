@@ -1,6 +1,8 @@
 import "package:ctcl_manager/base/DAOs/class.dao.dart";
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
+import "package:ctcl_manager/core/navigation/navigation.dart";
 import "package:ctcl_manager/src/views/viewstates/class_details.viewstate.dart";
+import "package:flutter/material.dart";
 
 final class ClassDetailsViewModel {
   final ClassDetailsViewState state;
@@ -60,12 +62,18 @@ final class ClassDetailsViewModel {
 
   // MARK: - Data
 
-  Future<void> deleteClass(String classId) async {
+  Future<void> deleteClass(BuildContext context, String classId) async {
     final response = await ClassDAO.delete(classId);
-    response.when(onError: (error) {});
+    response.when(
+      onOk: (data) {
+        NavigationManager.popWithConfirm(context);
+      },
+      onError: (error) {},
+    );
   }
 
-  Future<void> updateClass({
+  Future<void> updateClass(
+    BuildContext context, {
     required String classId,
     required String name,
     required String description,
@@ -79,6 +87,12 @@ final class ClassDetailsViewModel {
       valueHundred,
       localId,
     );
-    response.when(onError: (error) {});
+
+    response.when(
+      onOk: (data) {
+        NavigationManager.popWithConfirm(context);
+      },
+      onError: (error) {},
+    );
   }
 }
