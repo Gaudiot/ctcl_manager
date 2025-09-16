@@ -2,25 +2,60 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:intl/intl.dart";
 
-final class MonetaryValueObserver {
-  int _valueInHundred = 0;
+// MARK: - Controller
+
+final class MonetaryValueController extends ValueNotifier<int> {
+  MonetaryValueController([super.value = 0]);
 
   set valueInHundred(String value) {
-    _valueInHundred = int.parse(value.replaceAll(RegExp("[^0-9]"), ""));
+    super.value = int.parse(value.replaceAll(RegExp("[^0-9]"), ""));
   }
-
-  /// Returns the value in hundred (e.g R$ 1.378,09 -> 137809)
-  int get value => _valueInHundred;
 }
 
-final class MonetaryTextField extends StatelessWidget {
-  final MonetaryValueObserver? valueObserver;
+// MARK: - Component
 
-  const MonetaryTextField({super.key, this.valueObserver});
+final class MonetaryTextField extends StatefulWidget {
+  final MonetaryValueController? controller;
+
+  const MonetaryTextField({super.key, this.controller});
+
+  @override
+  State<MonetaryTextField> createState() => _MonetaryTextFieldState();
+}
+
+class _MonetaryTextFieldState extends State<MonetaryTextField> {
+  final TextEditingController _textFieldController = TextEditingController();
+  bool _updatedByUser = false;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller?.addListener(_onMonetaryValueControllerChanged);
+  }
+
+  @override
+  void dispose() {
+    _textFieldController.dispose();
+    widget.controller?.removeListener(_onMonetaryValueControllerChanged);
+    super.dispose();
+  }
+
+  void _onMonetaryValueControllerChanged() {
+    if (_updatedByUser) {
+      return;
+    }
+    final formattedValue = CurrencyInputFormatter().formatEditUpdate(
+      TextEditingValue.empty,
+      TextEditingValue(text: widget.controller?.value.toString() ?? ""),
+    );
+    _textFieldController.text = formattedValue.text;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: _textFieldController,
       decoration: InputDecoration(
         hintText: "R\$ 0,00",
         labelText: "Valor",
@@ -33,11 +68,15 @@ final class MonetaryTextField extends StatelessWidget {
         CurrencyInputFormatter(),
       ],
       onChanged: (value) {
-        valueObserver?.valueInHundred = value;
+        _updatedByUser = true;
+        widget.controller?.valueInHundred = value;
+        _updatedByUser = false;
       },
     );
   }
 }
+
+// MARK: - Formatter
 
 final class CurrencyInputFormatter extends TextInputFormatter {
   @override
@@ -45,10 +84,6 @@ final class CurrencyInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    if (newValue.selection.baseOffset == 0) {
-      return newValue;
-    }
-
     final value = double.parse(newValue.text);
 
     final formatter = NumberFormat.simpleCurrency(locale: "pt_Br");

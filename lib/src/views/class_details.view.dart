@@ -4,13 +4,35 @@ import "package:ctcl_manager/core/design/components/ui_dropdown.dart";
 import "package:ctcl_manager/src/viewmodels/class_details.viewmodel.dart";
 import "package:flutter/material.dart";
 
-class ClassDetailsView extends StatelessWidget {
+final class ClassDetailsView extends StatefulWidget {
   final String classId;
-  final classNameController = TextEditingController();
-  final classDescriptionController = TextEditingController();
   final ClassDetailsViewModel viewModel;
 
-  ClassDetailsView({required this.classId, required this.viewModel, super.key});
+  const ClassDetailsView({
+    required this.classId,
+    required this.viewModel,
+    super.key,
+  });
+
+  @override
+  State<ClassDetailsView> createState() => _ClassDetailsViewState();
+}
+
+class _ClassDetailsViewState extends State<ClassDetailsView> {
+  final classNameController = TextEditingController();
+  final classDescriptionController = TextEditingController();
+  final classValueController = MonetaryValueController();
+
+  @override
+  void initState() {
+    widget.viewModel.init(widget.classId).then((_) {
+      classNameController.text = widget.viewModel.state.name;
+      classDescriptionController.text = widget.viewModel.state.description;
+      classValueController.valueInHundred = widget.viewModel.state.valueHundred
+          .toString();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +88,7 @@ class ClassDetailsView extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 16),
-                  MonetaryTextField(),
+                  MonetaryTextField(controller: classValueController),
                   SizedBox(height: 16),
                   UIDropdown(placeholderText: "Selecione um local", items: []),
                   SizedBox(height: 16),
@@ -96,7 +118,7 @@ class ClassDetailsView extends StatelessWidget {
                       side: BorderSide(color: UIColors.primaryRed),
                     ),
                     onPressed: () {
-                      viewModel.deleteClass(classId);
+                      widget.viewModel.deleteClass(widget.classId);
                     },
                     child: Text(
                       "Apagar Turma",

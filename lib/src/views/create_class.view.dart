@@ -16,7 +16,7 @@ class CreateClassView extends StatefulWidget {
 class _CreateClassViewState extends State<CreateClassView> {
   final classNameController = TextEditingController();
   final classDescriptionController = TextEditingController();
-  final classValueController = MonetaryValueObserver();
+  final classValueController = MonetaryValueController();
   final classLocalController = ValueNotifier<String?>(null);
 
   @override
@@ -93,7 +93,7 @@ class _CreateClassViewState extends State<CreateClassView> {
                         ),
                       ),
                       SizedBox(height: 16),
-                      MonetaryTextField(valueObserver: classValueController),
+                      MonetaryTextField(controller: classValueController),
                       SizedBox(height: 16),
                       _LocalDropdown(
                         locals: widget.viewModel.state.locals,
