@@ -1,0 +1,19 @@
+{
+  "class_title": "Class",
+  "classes": "Classes",
+  "new_class": "+ Class",
+  "classes_loading_error": "Error loading classes",
+  "class_name": "Class name",
+  "class_description": "Class description",
+  "create_class": "Create Class",
+  "delete_class": "Delete Class",
+  "invalid_class_name_empty": "Class name cannot be empty",
+  "invalid_class_value_empty": "Class value cannot be empty",
+  "invalid_class_local_empty": "Class local cannot be empty",
+  "confirm_edit": "Confirm Edit",
+  "create_local": "Create Local",
+  "local_field_title": "Local name (*)",
+  "value_field_title": "Value",
+  "search_field_placeholder": "Search",
+  "select_local": "Select a local"
+}

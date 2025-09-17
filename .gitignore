@@ -144,3 +144,7 @@ app.*.symbols
 .python-version
 .gclient_previous_custom_vars
 .gclient_previous_sync_commits
+
+# internationalization
+lib/l10n/untranslated_messages.txt
+lib/l10n/app_localizations.dart

@@ -1,5 +1,6 @@
 import "package:ctcl_manager/base/uicolors.dart";
 import "package:ctcl_manager/core/design/components/debounce_text_field.dart";
+import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:ctcl_manager/src/viewmodels/class_listing.viewmodel.dart";
 import "package:flutter/material.dart";
 
@@ -24,7 +25,7 @@ class _ClassListingViewState extends State<ClassListingView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Turmas",
+          context.strings.classes,
           style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
         ),
         backgroundColor: UIColors.primaryOrangeLighter,
@@ -63,7 +64,7 @@ class _ClassListingViewState extends State<ClassListingView> {
                       shape: StadiumBorder(),
                     ),
                     onPressed: () => widget.viewModel.goToCreateClass(context),
-                    child: const Text("+ Turma"),
+                    child: Text(context.strings.new_class),
                   ),
                 ),
               ],
@@ -171,6 +172,8 @@ final class _ClassListingError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: Center(child: Text("Erro ao carregar turmas")));
+    return Expanded(
+      child: Center(child: Text(context.strings.classes_loading_error)),
+    );
   }
 }

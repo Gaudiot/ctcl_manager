@@ -1,0 +1,19 @@
+{
+  "class_title": "Turma",
+  "classes": "Turmas",
+  "new_class": "+ Turma",
+  "classes_loading_error": "Erro ao carregar turmas",
+  "class_name": "Nome da turma",
+  "class_description": "Descrição da turma",
+  "create_class": "Criar Turma",
+  "delete_class": "Apagar Turma",
+  "invalid_class_name_empty": "Nome não pode ser vazio",
+  "invalid_class_value_empty": "Valor não pode ser vazio",
+  "invalid_class_local_empty": "Local não pode ser vazio",
+  "confirm_edit": "Confirmar Edição",
+  "create_local": "Criar Local",
+  "local_field_title": "Nome do local (*)",
+  "value_field_title": "Valor",
+  "search_field_placeholder": "Pesquisar",
+  "select_local": "Selecione um local"
+}

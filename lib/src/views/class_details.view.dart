@@ -1,6 +1,7 @@
 import "package:ctcl_manager/base/components/locals_dropdown.dart";
 import "package:ctcl_manager/base/uicolors.dart";
 import "package:ctcl_manager/core/design/components/monetary_text_field.dart";
+import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:ctcl_manager/src/viewmodels/class_details.viewmodel.dart";
 import "package:flutter/material.dart";
 
@@ -41,7 +42,7 @@ class _ClassDetailsViewState extends State<ClassDetailsView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Turma",
+          context.strings.class_title,
           style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
         ),
         backgroundColor: UIColors.primaryOrangeLighter,
@@ -70,8 +71,8 @@ class _ClassDetailsViewState extends State<ClassDetailsView> {
                   TextField(
                     controller: classNameController,
                     decoration: InputDecoration(
-                      labelText: "Nome da turma",
-                      hintText: "Nome da turma",
+                      labelText: context.strings.class_name,
+                      hintText: context.strings.class_name,
                       border: OutlineInputBorder(),
                       errorBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: UIColors.primaryRed),
@@ -84,8 +85,8 @@ class _ClassDetailsViewState extends State<ClassDetailsView> {
                     minLines: 3,
                     maxLines: 3,
                     decoration: InputDecoration(
-                      labelText: "Descrição da turma",
-                      hintText: "Descrição da turma",
+                      labelText: context.strings.class_description,
+                      hintText: context.strings.class_description,
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -110,7 +111,7 @@ class _ClassDetailsViewState extends State<ClassDetailsView> {
                         localId: classLocalController.value ?? "",
                       );
                     },
-                    child: Text("Confirmar Edição"),
+                    child: Text(context.strings.confirm_edit),
                   ),
                   SizedBox(height: 4),
                   TextButton(
@@ -124,7 +125,7 @@ class _ClassDetailsViewState extends State<ClassDetailsView> {
                       widget.viewModel.deleteClass(context, widget.classId);
                     },
                     child: Text(
-                      "Apagar Turma",
+                      context.strings.delete_class,
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
