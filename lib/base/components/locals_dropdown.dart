@@ -1,6 +1,7 @@
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
 import "package:ctcl_manager/base/DAOs/models/local.dao_model.dart";
 import "package:ctcl_manager/base/uicolors.dart";
+import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:ctcl_manager/src/views/bottomsheets/create_local.bottomsheet.dart";
 import "package:flutter/material.dart";
 
@@ -141,7 +142,7 @@ class _LocalsDropdownState extends State<LocalsDropdown> {
               return DropdownButtonHideUnderline(
                 child: DropdownButton(
                   value: widget.controller?.value,
-                  hint: Text("Selecione um local"),
+                  hint: Text(context.strings.select_local),
                   items: state.locals
                       .map(
                         (local) => DropdownMenuItem(

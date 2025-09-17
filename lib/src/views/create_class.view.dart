@@ -1,6 +1,7 @@
 import "package:ctcl_manager/base/components/locals_dropdown.dart";
 import "package:ctcl_manager/base/uicolors.dart";
 import "package:ctcl_manager/core/design/components/monetary_text_field.dart";
+import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:ctcl_manager/src/viewmodels/create_class.viewmodel.dart";
 import "package:flutter/material.dart";
 
@@ -38,7 +39,7 @@ class _CreateClassViewState extends State<CreateClassView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Criar Turma",
+          context.strings.create_class,
           style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
         ),
         backgroundColor: UIColors.primaryOrangeLighter,
@@ -70,8 +71,8 @@ class _CreateClassViewState extends State<CreateClassView> {
                       TextField(
                         controller: classNameController,
                         decoration: InputDecoration(
-                          labelText: "Nome da turma",
-                          hintText: "Nome da turma",
+                          labelText: context.strings.class_name,
+                          hintText: context.strings.class_name,
                           border: OutlineInputBorder(),
                           errorBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: UIColors.primaryRed),
@@ -87,8 +88,8 @@ class _CreateClassViewState extends State<CreateClassView> {
                         minLines: 3,
                         maxLines: 3,
                         decoration: InputDecoration(
-                          labelText: "Descrição da turma",
-                          hintText: "Descrição da turma",
+                          labelText: context.strings.class_description,
+                          hintText: context.strings.class_description,
                           border: OutlineInputBorder(),
                         ),
                       ),
@@ -118,7 +119,7 @@ class _CreateClassViewState extends State<CreateClassView> {
                               localId: classLocalController.value ?? "",
                             );
                           },
-                          child: const Text("Criar Turma"),
+                          child: Text(context.strings.create_class),
                         ),
                       ),
                     ],

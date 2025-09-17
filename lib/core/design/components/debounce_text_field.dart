@@ -1,6 +1,7 @@
 import "dart:async";
 
 import "package:ctcl_manager/base/uicolors.dart";
+import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:flutter/material.dart";
 
 final class DebounceTextField extends StatefulWidget {
@@ -44,7 +45,7 @@ class _DebounceTextFieldState extends State<DebounceTextField> {
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.search),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
-        labelText: "Pesquisar",
+        labelText: context.strings.search_field_placeholder,
         fillColor: UIColors.primaryWhite,
         filled: true,
       ),

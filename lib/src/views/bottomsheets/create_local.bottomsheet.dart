@@ -1,6 +1,7 @@
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
 import "package:ctcl_manager/base/uicolors.dart";
 import "package:ctcl_manager/core/navigation/navigation.dart";
+import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:flutter/material.dart";
 
 class CreateLocalBottomSheet extends StatelessWidget {
@@ -27,7 +28,7 @@ class CreateLocalBottomSheet extends StatelessWidget {
               SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  "Criar Local",
+                  context.strings.create_local,
                   style:
                       Theme.of(context).appBarTheme.titleTextStyle ??
                       TextStyle(
@@ -45,7 +46,7 @@ class CreateLocalBottomSheet extends StatelessWidget {
           TextField(
             controller: nameController,
             decoration: InputDecoration(
-              labelText: "Nome do local (*)",
+              labelText: context.strings.local_field_title,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(4),
               ),
@@ -72,7 +73,7 @@ class CreateLocalBottomSheet extends StatelessWidget {
               },
               style: TextButton.styleFrom(shape: StadiumBorder()),
               child: Text(
-                "Criar Local",
+                context.strings.create_local,
                 style: TextStyle(fontSize: 16, color: UIColors.primaryWhite),
               ),
             ),

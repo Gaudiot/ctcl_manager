@@ -1,3 +1,4 @@
+import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:intl/intl.dart";
@@ -58,7 +59,7 @@ class _MonetaryTextFieldState extends State<MonetaryTextField> {
       controller: _textFieldController,
       decoration: InputDecoration(
         hintText: "R\$ 0,00",
-        labelText: "Valor",
+        labelText: context.strings.value_field_title,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         border: OutlineInputBorder(),
       ),
