@@ -1,14 +1,19 @@
 import "package:ctcl_manager/base/DAOs/class.dao.dart";
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
 import "package:ctcl_manager/core/navigation/navigation.dart";
+import "package:ctcl_manager/core/notifications/toast.dart";
+import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:ctcl_manager/src/views/bottomsheets/create_local.bottomsheet.dart";
 import "package:ctcl_manager/src/views/viewstates/create_class.viewstate.dart";
 import "package:flutter/material.dart";
 
 final class CreateClassViewModel {
+  final BuildContext context;
+  final ToastNotifications toast;
   final CreateClassViewState state;
 
-  CreateClassViewModel({required this.state});
+  CreateClassViewModel(this.context, {required this.state})
+    : toast = ToastNotifications(context: context);
 
   String get newLocalId => "new_local";
 
@@ -32,6 +37,10 @@ final class CreateClassViewModel {
         state.isLoading = false;
       },
       onError: (error) {
+        toast.showError(
+          title: context.strings.error_fetch_locals_title,
+          description: context.strings.error_fetch_locals_description,
+        );
         state.hasError = true;
       },
     );
@@ -82,7 +91,12 @@ final class CreateClassViewModel {
       onOk: (data) {
         NavigationManager.popWithConfirm(context);
       },
-      onError: (error) {},
+      onError: (error) {
+        toast.showError(
+          title: context.strings.error_create_class_title,
+          description: context.strings.error_create_class_description,
+        );
+      },
     );
   }
 

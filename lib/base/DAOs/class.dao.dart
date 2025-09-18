@@ -48,7 +48,7 @@ final class ClassDAO {
   // MARK: - Read
 
   static Future<Result<List<ClassSummaryDAOModel>, ClassDAOError>>
-  getClassesSumary() async {
+  getClassesSummary() async {
     ClassDAOError? daoError;
     final response = await SupabaseService.client
         .from(SupabaseTables.classes.name)
@@ -80,7 +80,7 @@ final class ClassDAO {
   }
 
   static Future<Result<List<ClassSummaryDAOModel>, ClassDAOError>>
-  getClassesSumaryByName(String name) async {
+  getClassesSummaryByName(String name) async {
     ClassDAOError? daoError;
     final response = await SupabaseService.client
         .from(SupabaseTables.classes.name)
