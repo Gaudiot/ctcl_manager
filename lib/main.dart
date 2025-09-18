@@ -1,6 +1,13 @@
-import 'package:flutter/material.dart';
+import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
+import "package:ctcl_manager/core/navigation/navigation.dart";
+import "package:ctcl_manager/core/variables/envs.dart";
+import "package:ctcl_manager/l10n/app_localizations.dart";
+import "package:flutter/material.dart";
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Envs.initialize();
+  await SupabaseService.initialize();
   runApp(const MainApp());
 }
 
@@ -9,12 +16,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      initialRoute: NavigationManager.initialRoute,
+      routes: NavigationManager.routesMap(),
     );
   }
 }
