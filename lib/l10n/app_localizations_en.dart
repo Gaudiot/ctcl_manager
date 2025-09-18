@@ -58,4 +58,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get select_local => 'Select a local';
+
+  @override
+  String get delete_class_error => 'Error deleting class';
+
+  @override
+  String get delete_class_error_description =>
+      'There was an error deleting the class. Please try again later.';
+
+  @override
+  String get update_class_error => 'Error updating class';
+
+  @override
+  String get update_class_error_description =>
+      'There was an error updating the class. Please try again later.';
+
+  @override
+  String get error_fetch_class_title => 'Error fetching class';
+
+  @override
+  String get error_fetch_class_description =>
+      'There was an error fetching the class. Please try again later.';
+
+  @override
+  String get error_fetch_classes_title => 'Error fetching classes';
+
+  @override
+  String get error_fetch_classes_description =>
+      'There was an error fetching the classes. Please try again later.';
+
+  @override
+  String get error_fetch_locals_title => 'Error fetching locals';
+
+  @override
+  String get error_fetch_locals_description =>
+      'There was an error fetching the locals. Please try again later.';
+
+  @override
+  String get error_create_class_title => 'Error creating class';
+
+  @override
+  String get error_create_class_description =>
+      'There was an error creating the class. Please try again later.';
 }

@@ -58,4 +58,46 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get select_local => 'Selecione um local';
+
+  @override
+  String get delete_class_error => 'Erro ao deletar classe';
+
+  @override
+  String get delete_class_error_description =>
+      'Houve um erro ao deletar a classe. Tente novamente mais tarde.';
+
+  @override
+  String get update_class_error => 'Erro ao atualizar classe';
+
+  @override
+  String get update_class_error_description =>
+      'Houve um erro ao atualizar a classe. Tente novamente mais tarde.';
+
+  @override
+  String get error_fetch_class_title => 'Erro ao buscar classe';
+
+  @override
+  String get error_fetch_class_description =>
+      'Houve um erro ao buscar a classe. Tente novamente mais tarde.';
+
+  @override
+  String get error_fetch_classes_title => 'Erro ao buscar classes';
+
+  @override
+  String get error_fetch_classes_description =>
+      'Houve um erro ao buscar as classes. Tente novamente mais tarde.';
+
+  @override
+  String get error_fetch_locals_title => 'Erro ao buscar locais';
+
+  @override
+  String get error_fetch_locals_description =>
+      'Houve um erro ao buscar os locais. Tente novamente mais tarde.';
+
+  @override
+  String get error_create_class_title => 'Erro ao criar classe';
+
+  @override
+  String get error_create_class_description =>
+      'Houve um erro ao criar a classe. Tente novamente mais tarde.';
 }

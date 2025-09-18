@@ -15,5 +15,17 @@
   "local_field_title": "Local name (*)",
   "value_field_title": "Value",
   "search_field_placeholder": "Search",
-  "select_local": "Select a local"
+  "select_local": "Select a local",
+  "delete_class_error": "Error deleting class",
+  "delete_class_error_description": "There was an error deleting the class. Please try again later.",
+  "update_class_error": "Error updating class",
+  "update_class_error_description": "There was an error updating the class. Please try again later.",
+  "error_fetch_class_title": "Error fetching class",
+  "error_fetch_class_description": "There was an error fetching the class. Please try again later.",
+  "error_fetch_classes_title": "Error fetching classes",
+  "error_fetch_classes_description": "There was an error fetching the classes. Please try again later.",
+  "error_fetch_locals_title": "Error fetching locals",
+  "error_fetch_locals_description": "There was an error fetching the locals. Please try again later.",
+  "error_create_class_title": "Error creating class",
+  "error_create_class_description": "There was an error creating the class. Please try again later."
 }

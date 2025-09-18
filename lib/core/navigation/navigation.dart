@@ -31,11 +31,13 @@ class NavigationManager {
     return {
       NavigationRoutes.classListing.path: (context) => ClassListingView(
         viewModel: ClassListingViewModel(
+          context,
           state: ClassListingViewState(classes: []),
         ),
       ),
       NavigationRoutes.createClass.path: (context) => CreateClassView(
         viewModel: CreateClassViewModel(
+          context,
           state: CreateClassViewState(locals: []),
         ),
       ),
@@ -47,6 +49,7 @@ class NavigationManager {
         return ClassDetailsView(
           classId: classId,
           viewModel: ClassDetailsViewModel(
+            context,
             state: ClassDetailsViewState.empty(),
           ),
         );

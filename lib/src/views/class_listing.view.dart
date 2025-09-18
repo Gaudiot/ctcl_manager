@@ -41,7 +41,7 @@ class _ClassListingViewState extends State<ClassListingView> {
                   padding: const EdgeInsets.all(16),
                   child: DebounceTextField(
                     debouceTimeInMilliseconds: 300,
-                    onDebounce: widget.viewModel.getClassesSumaryByName,
+                    onDebounce: widget.viewModel.getClassesSummaryByName,
                   ),
                 ),
                 Container(

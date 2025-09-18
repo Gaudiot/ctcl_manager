@@ -1,13 +1,18 @@
 import "package:ctcl_manager/base/DAOs/class.dao.dart";
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
 import "package:ctcl_manager/core/navigation/navigation.dart";
+import "package:ctcl_manager/core/notifications/toast.dart";
+import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:ctcl_manager/src/views/viewstates/class_details.viewstate.dart";
 import "package:flutter/material.dart";
 
 final class ClassDetailsViewModel {
+  final BuildContext context;
+  final ToastNotifications toast;
   final ClassDetailsViewState state;
 
-  ClassDetailsViewModel({required this.state});
+  ClassDetailsViewModel(this.context, {required this.state})
+    : toast = ToastNotifications(context: context);
 
   String get newLocalId => "new_local";
 
@@ -32,6 +37,10 @@ final class ClassDetailsViewModel {
         state.isLoading = false;
       },
       onError: (error) {
+        toast.showError(
+          title: context.strings.error_fetch_class_title,
+          description: context.strings.error_fetch_class_description,
+        );
         state.hasError = true;
       },
     );
@@ -55,6 +64,10 @@ final class ClassDetailsViewModel {
         state.isLoading = false;
       },
       onError: (error) {
+        toast.showError(
+          title: context.strings.error_fetch_locals_title,
+          description: context.strings.error_fetch_locals_description,
+        );
         state.hasError = true;
       },
     );
@@ -68,7 +81,12 @@ final class ClassDetailsViewModel {
       onOk: (data) {
         NavigationManager.popWithConfirm(context);
       },
-      onError: (error) {},
+      onError: (error) {
+        toast.showError(
+          title: context.strings.delete_class_error,
+          description: context.strings.delete_class_error_description,
+        );
+      },
     );
   }
 
@@ -92,7 +110,12 @@ final class ClassDetailsViewModel {
       onOk: (data) {
         NavigationManager.popWithConfirm(context);
       },
-      onError: (error) {},
+      onError: (error) {
+        toast.showError(
+          title: context.strings.update_class_error,
+          description: context.strings.update_class_error_description,
+        );
+      },
     );
   }
 }

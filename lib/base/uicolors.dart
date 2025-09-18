@@ -40,4 +40,7 @@ final class UIColors {
   /// MARK: - Red
 
   static const Color primaryRed = Colors.red;
+  static const Color primaryRedLight = Color(0xFFF76154);
+  static const Color primaryRedLighter = Color(0xFFFA8072);
+  static const Color primaryRedLightest = Color(0xFFFD9F90);
 }
