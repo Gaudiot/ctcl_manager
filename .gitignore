@@ -12,6 +12,7 @@
 .buildlog/
 .history
 .svn/
+.env
 
 # As packages are no longer pinned, we use a lockfile for testing locally.
 # When unpinning packages, Using lockfiles ensures that failures in PRs are
@@ -148,3 +149,6 @@ app.*.symbols
 # internationalization
 lib/l10n/untranslated_messages.txt
 lib/l10n/app_localizations.dart
+
+# FVM Version Cache
+.fvm/

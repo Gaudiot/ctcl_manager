@@ -96,7 +96,7 @@ class _ClassListingViewState extends State<ClassListingView> {
                         state.classes[index].id,
                       ),
                     ),
-                    separatorBuilder: (_, _) => SizedBox(height: 8),
+                    separatorBuilder: (_, __) => SizedBox(height: 8),
                   ),
                 );
               },
