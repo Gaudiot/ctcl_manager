@@ -13,16 +13,20 @@ final class ToastNotifications {
   ToastNotifications({required this.context});
 
   void showError({required String title, String? description}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(title)),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(title)));
   }
 
   // void showError({required String title, String? description}) {
-  //   fToast
-  //     ..removeCustomToast()
-  //     ..showToast(
-  //       toastDuration: Duration(seconds: 5),
+  // const millisecondsPerCharacter = 50;
+  // fToast
+  //   ..removeCustomToast()
+  //   ..showToast(
+  //     isDismissible: true,
+  //     toastDuration: Duration(
+  //       milliseconds:
+  //           millisecondsPerCharacter *
+  //           (title.length + (description?.length ?? 0)),
+  //     ),
   //       child: Container(
   //         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
   //         decoration: BoxDecoration(
