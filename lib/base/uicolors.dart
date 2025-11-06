@@ -27,15 +27,17 @@ final class UIColors {
 
   /// MARK: - Orange
 
-  static const Color primaryOrange = Color(0xFFFF7F12);
-  static const Color primaryOrangeLight = Color(0xFFFF931C);
-  static const Color primaryOrangeLighter = Color(0xFFFF9E26);
+  static const Color primaryOrange = Color(0xFFFD6700);
+  static const Color primaryOrangeLight = Color(0xFFFD760F);
+  static const Color primaryOrangeLighter = Color(0xFFFD821E);
+  static const Color primaryOrangeLightest = Color(0xFFFD912D);
 
   /// MARK: - Yellow
 
-  static const Color primaryYellow = Color(0xFFFEAF00);
-  static const Color primaryYellowLight = Color(0xFFFEC10A);
-  static const Color primaryYellowLighter = Color(0xFFFECB14);
+  static const Color primaryYellow = Color(0xFFFFCC00);
+  static const Color primaryYellowLight = Color(0xFFFFD60A);
+  static const Color primaryYellowLighter = Color(0xFFFFE014);
+  static const Color primaryYellowLightest = Color(0xFFFFE91E);
 
   /// MARK: - Red
 
