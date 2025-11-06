@@ -12,7 +12,7 @@ final class ClassDetailsViewModel {
   final ClassDetailsViewState state;
 
   ClassDetailsViewModel(this.context, {required this.state})
-    : toast = ToastNotifications(context: context);
+      : toast = ToastNotifications(context: context);
 
   String get newLocalId => "new_local";
 
