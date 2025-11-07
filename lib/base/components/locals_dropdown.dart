@@ -1,6 +1,7 @@
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
 import "package:ctcl_manager/base/DAOs/models/local.dao_model.dart";
 import "package:ctcl_manager/base/uicolors.dart";
+import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
 import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:ctcl_manager/src/views/bottomsheets/create_local.bottomsheet.dart";
 import "package:flutter/material.dart";
@@ -75,11 +76,14 @@ class _LocalsDropdownState extends State<LocalsDropdown> {
 
   Future<void> _fetchLocals() async {
     state.isLoading = true;
-    final result = await LocalDAO.getLocals();
+    final localsResult = await LocalDAO(SupabaseService.instance).getAll();
 
-    result.when(
+    localsResult.when(
       onOk: (locals) {
-        state.locals = locals;
+        state.locals = locals
+            .map(
+                (local) => LocalSummaryDAOModel(id: local.id, name: local.name))
+            .toList();
         state.isLoading = false;
       },
       onError: (error) {
@@ -124,9 +128,8 @@ class _LocalsDropdownState extends State<LocalsDropdown> {
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(4),
             border: Border.all(
-              color: hasError
-                  ? UIColors.primaryRed
-                  : UIColors.primaryGreyDarker,
+              color:
+                  hasError ? UIColors.primaryRed : UIColors.primaryGreyDarker,
             ),
           ),
           child: ListenableBuilder(

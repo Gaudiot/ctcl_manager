@@ -1,5 +1,7 @@
 import "package:ctcl_manager/base/DAOs/class.dao.dart";
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
+import "package:ctcl_manager/base/DAOs/models/class.dao_model.dart";
+import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
 import "package:ctcl_manager/core/navigation/navigation.dart";
 import "package:ctcl_manager/core/notifications/toast.dart";
 import "package:ctcl_manager/l10n/localizations_extension.dart";
@@ -13,7 +15,7 @@ final class CreateClassViewModel {
   final CreateClassViewState state;
 
   CreateClassViewModel(this.context, {required this.state})
-    : toast = ToastNotifications(context: context);
+      : toast = ToastNotifications(context: context);
 
   String get newLocalId => "new_local";
 
@@ -21,9 +23,9 @@ final class CreateClassViewModel {
 
   Future<void> getLocals() async {
     state.isLoading = true;
-    final locals = await LocalDAO.getLocals();
+    final localsResult = await LocalDAO(SupabaseService.instance).getAll();
 
-    locals.when(
+    localsResult.when(
       onOk: (locals) {
         final fetchedLocals = locals
             .map((local) => LocalSummary(id: local.id, name: local.name))
@@ -80,11 +82,16 @@ final class CreateClassViewModel {
       return;
     }
 
-    final response = await ClassDAO.addClass(
-      name: name,
-      valueHundred: valueHundred,
-      localId: localId!,
-      description: description,
+    final response = await ClassDAO(SupabaseService.instance).create(
+      ClassDAOModel(
+        id: "",
+        name: name,
+        description: description,
+        valueHundred: valueHundred,
+        localId: localId,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      ),
     );
 
     response.when(

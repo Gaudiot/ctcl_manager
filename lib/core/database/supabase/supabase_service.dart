@@ -16,67 +16,46 @@ enum SupabaseTables {
   String get name => _name;
 }
 
-class SupabaseService implements IDatabaseClient {
+final class SupabaseService implements IDatabaseClient {
   SupabaseService._internal();
 
-  static Future<void> initialize() async {
-    final supabaseUrl = Envs.get(
-      key: EnvsKeys.supabaseUrl,
-      fallback: "SUA_SUPABASE_URL_AQUI",
-    );
-    final supabaseAnonKey = Envs.get(
-      key: EnvsKeys.supabaseAnonKey,
-      fallback: "SUA_SUPABASE_ANON_KEY_AQUI",
-    );
+  static final SupabaseService _instance = SupabaseService._internal();
 
-    await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
-  }
+  static SupabaseService get instance => _instance;
 
-  static SupabaseClient get client {
+  SupabaseClient get _client {
     return Supabase.instance.client;
   }
 
-  static void getTable(
-    SupabaseTables table, {
-    int limit = 100,
-    int offset = 0,
-  }) {
-    client
-        .from(table.name)
-        .select()
-        .range(offset * limit, (offset + 1) * limit - 1);
-  }
-
-  // MARK: - INITIALIZE
+  // MARK: - Initialize
 
   @override
   Future<void> start() async {
     final supabaseUrl = Envs.get(
       key: EnvsKeys.supabaseUrl,
-      fallback: "SUA_SUPABASE_URL_AQUI",
+      fallback: "YOUR_SUPABASE_URL",
     );
     final supabaseAnonKey = Envs.get(
       key: EnvsKeys.supabaseAnonKey,
-      fallback: "SUA_SUPABASE_ANON_KEY_AQUI",
+      fallback: "YOUR_SUPABASE_ANON_KEY",
     );
 
     await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
   }
 
-  // MARK: - CREATE
+  // MARK: - Create
 
   @override
   Future<Map<String, dynamic>> insert(
     String table,
     Map<String, dynamic> data,
   ) async {
-    final response =
-        await Supabase.instance.client.from(table).insert(data).select();
+    final response = await _client.from(table).insert(data).select();
 
     return response[0];
   }
 
-  // MARK: - READ
+  // MARK: - Read
 
   @override
   Future<List<Map<String, dynamic>>> get(
@@ -84,7 +63,7 @@ class SupabaseService implements IDatabaseClient {
     int limit = 100,
     int offset = 0,
   }) async {
-    final response = await Supabase.instance.client
+    final response = await _client
         .from(table)
         .select()
         .range(offset * limit, (offset + 1) * limit - 1);
@@ -94,13 +73,12 @@ class SupabaseService implements IDatabaseClient {
 
   @override
   Future<Map<String, dynamic>> getById(String table, String id) async {
-    final response =
-        await Supabase.instance.client.from(table).select().eq("id", id);
+    final response = await _client.from(table).select().eq("id", id);
 
     return response[0];
   }
 
-  // MARK: - UPDATE
+  // MARK: - Update
 
   @override
   Future<Map<String, dynamic>> updateById(
@@ -109,15 +87,15 @@ class SupabaseService implements IDatabaseClient {
     Map<String, dynamic> data,
   ) async {
     final response =
-        await Supabase.instance.client.from(table).update(data).eq("id", id);
+        await _client.from(table).update(data).eq("id", id).select().single();
 
-    return response[0];
+    return response;
   }
 
-  // MARK: - DELETE
+  // MARK: - Delete
 
   @override
   Future<void> deleteById(String table, String id) async {
-    await Supabase.instance.client.from(table).delete().eq("id", id);
+    await _client.from(table).delete().eq("id", id);
   }
 }

@@ -1,4 +1,5 @@
 import "package:ctcl_manager/base/DAOs/class.dao.dart";
+import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
 import "package:ctcl_manager/core/navigation/navigation.dart";
 import "package:ctcl_manager/core/notifications/toast.dart";
 import "package:ctcl_manager/l10n/localizations_extension.dart";
@@ -11,23 +12,23 @@ class ClassListingViewModel {
   final ClassListingViewState state;
 
   ClassListingViewModel(this.context, {required this.state})
-    : toast = ToastNotifications(context: context);
+      : toast = ToastNotifications(context: context);
 
   // MARK: - Fetch Data
 
   Future<void> getClasses() async {
     state.isLoading = true;
-    final classes = await ClassDAO.getClassesSummary();
+    final classesResult = await ClassDAO(SupabaseService.instance).getAll();
 
-    classes.when(
+    classesResult.when(
       onOk: (classes) {
         state.classes = classes
             .map(
               (classSumary) => ClassSumary(
                 id: classSumary.id,
                 name: classSumary.name,
-                local: classSumary.localName,
-                studentsQuantity: classSumary.studentsQuantity,
+                local: "",
+                studentsQuantity: 0,
               ),
             )
             .toList();
@@ -45,7 +46,7 @@ class ClassListingViewModel {
 
   Future<void> getClassesSummaryByName(String name) async {
     state.isLoading = true;
-    final classes = await ClassDAO.getClassesSummaryByName(name);
+    final classes = await ClassDAO(SupabaseService.instance).getAllByName(name);
 
     classes.when(
       onOk: (classes) {
@@ -54,8 +55,8 @@ class ClassListingViewModel {
               (classSumary) => ClassSumary(
                 id: classSumary.id,
                 name: classSumary.name,
-                local: classSumary.localName,
-                studentsQuantity: classSumary.studentsQuantity,
+                local: "",
+                studentsQuantity: 0,
               ),
             )
             .toList();

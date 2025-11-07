@@ -7,7 +7,7 @@ import "package:flutter/material.dart";
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Envs.initialize();
-  await SupabaseService.initialize();
+  await SupabaseService.instance.start();
   runApp(const MainApp());
 }
 

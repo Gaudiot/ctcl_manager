@@ -1,5 +1,7 @@
 import "package:ctcl_manager/base/DAOs/class.dao.dart";
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
+import "package:ctcl_manager/base/DAOs/models/class.dao_model.dart";
+import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
 import "package:ctcl_manager/core/navigation/navigation.dart";
 import "package:ctcl_manager/core/notifications/toast.dart";
 import "package:ctcl_manager/l10n/localizations_extension.dart";
@@ -25,7 +27,7 @@ final class ClassDetailsViewModel {
 
   Future<void> getClassById(String id) async {
     state.isLoading = true;
-    final classResult = await ClassDAO.getClassById(id);
+    final classResult = await ClassDAO(SupabaseService.instance).getById(id);
 
     classResult.when(
       onOk: (classData) {
@@ -48,9 +50,9 @@ final class ClassDetailsViewModel {
 
   Future<void> getLocals() async {
     state.isLoading = true;
-    final locals = await LocalDAO.getLocals();
+    final localsResult = await LocalDAO(SupabaseService.instance).getAll();
 
-    locals.when(
+    localsResult.when(
       onOk: (locals) {
         final fetchedLocals = locals
             .map((local) => LocalSummary(id: local.id, name: local.name))
@@ -76,7 +78,8 @@ final class ClassDetailsViewModel {
   // MARK: - Data
 
   Future<void> deleteClass(BuildContext context, String classId) async {
-    final response = await ClassDAO.delete(classId);
+    final response =
+        await ClassDAO(SupabaseService.instance).deleteById(classId);
     response.when(
       onOk: (data) {
         NavigationManager.popWithConfirm(context);
@@ -98,12 +101,17 @@ final class ClassDetailsViewModel {
     required int valueHundred,
     required String localId,
   }) async {
-    final response = await ClassDAO.update(
+    final response = await ClassDAO(SupabaseService.instance).updateById(
       classId,
-      name,
-      description,
-      valueHundred,
-      localId,
+      ClassDAOModel(
+        id: classId,
+        name: name,
+        description: description,
+        valueHundred: valueHundred,
+        localId: localId,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      ),
     );
 
     response.when(

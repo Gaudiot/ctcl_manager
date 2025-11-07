@@ -1,5 +1,7 @@
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
+import "package:ctcl_manager/base/DAOs/models/local.dao_model.dart";
 import "package:ctcl_manager/base/uicolors.dart";
+import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
 import "package:ctcl_manager/core/navigation/navigation.dart";
 import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:flutter/material.dart";
@@ -29,8 +31,7 @@ class CreateLocalBottomSheet extends StatelessWidget {
               Expanded(
                 child: Text(
                   context.strings.create_local,
-                  style:
-                      Theme.of(context).appBarTheme.titleTextStyle ??
+                  style: Theme.of(context).appBarTheme.titleTextStyle ??
                       TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
@@ -62,7 +63,14 @@ class CreateLocalBottomSheet extends StatelessWidget {
             child: TextButton(
               onPressed: () async {
                 final name = nameController.text;
-                final result = await LocalDAO.addLocal(name);
+                final result = await LocalDAO(SupabaseService.instance).create(
+                  LocalDAOModel(
+                    id: "",
+                    name: name,
+                    createdAt: DateTime.now(),
+                    updatedAt: DateTime.now(),
+                  ),
+                );
 
                 result.when(
                   onOk: (local) {
