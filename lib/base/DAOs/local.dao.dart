@@ -13,65 +13,6 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
 
   // MARK: - Create
 
-  static Future<Result<LocalSummaryDAOModel, LocalDAOError>> addLocal(
-    String name,
-  ) async {
-    LocalDAOError? daoError;
-
-    final response =
-        await SupabaseService.client.from(SupabaseTables.locals.name).insert({
-      "name": name,
-    }).onError((error, stackTrace) {
-      daoError = LocalDAOError(
-        message: "Error creating local in Supabase",
-        original: error,
-      );
-    });
-
-    if (daoError != null) {
-      return Result.error(daoError);
-    }
-
-    return Result.ok(
-      LocalSummaryDAOModel(
-        id: response["id"],
-        name: response["name"],
-      ),
-    );
-  }
-
-  // MARK: - Read
-
-  static Future<Result<List<LocalSummaryDAOModel>, LocalDAOError>>
-      getLocals() async {
-    LocalDAOError? daoError;
-
-    final response = await SupabaseService.client
-        .from(SupabaseTables.locals.name)
-        .select("id, name")
-        .onError((error, stackTrace) {
-      daoError = LocalDAOError(
-        message: "Error fetching locals from Supabase",
-        original: error,
-      );
-      return [];
-    });
-
-    if (daoError != null) {
-      return Result.error(daoError);
-    }
-
-    final locals = response
-        .map(
-          (local) => LocalSummaryDAOModel(id: local["id"], name: local["name"]),
-        )
-        .toList();
-
-    return Result.ok(locals);
-  }
-
-  // MARK: - Create
-
   @override
   Future<Result<LocalDAOModel, LocalDAOError>> create(
     LocalDAOModel data,
@@ -92,12 +33,7 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
     }
 
     return Result.ok(
-      LocalDAOModel(
-        id: response["id"],
-        name: response["name"],
-        createdAt: DateTime.parse(response["created_at"]),
-        updatedAt: DateTime.parse(response["updated_at"]),
-      ),
+      LocalDAOModel.fromJson(response),
     );
   }
 
