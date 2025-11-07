@@ -63,7 +63,9 @@ class CreateLocalBottomSheet extends StatelessWidget {
             child: TextButton(
               onPressed: () async {
                 final name = nameController.text;
-                final result = await LocalDAO(SupabaseService.instance).create(
+                final result =
+                    await LocalDAO(databaseClient: SupabaseService.instance)
+                        .create(
                   LocalDAOModel(
                     id: "",
                     name: name,

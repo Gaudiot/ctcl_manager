@@ -23,7 +23,8 @@ final class CreateClassViewModel {
 
   Future<void> getLocals() async {
     state.isLoading = true;
-    final localsResult = await LocalDAO(SupabaseService.instance).getAll();
+    final localsResult =
+        await LocalDAO(databaseClient: SupabaseService.instance).getAll();
 
     localsResult.when(
       onOk: (locals) {
@@ -82,7 +83,8 @@ final class CreateClassViewModel {
       return;
     }
 
-    final response = await ClassDAO(SupabaseService.instance).create(
+    final response =
+        await ClassDAO(databaseClient: SupabaseService.instance).create(
       ClassDAOModel(
         id: "",
         name: name,

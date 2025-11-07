@@ -76,7 +76,8 @@ class _LocalsDropdownState extends State<LocalsDropdown> {
 
   Future<void> _fetchLocals() async {
     state.isLoading = true;
-    final localsResult = await LocalDAO(SupabaseService.instance).getAll();
+    final localsResult =
+        await LocalDAO(databaseClient: SupabaseService.instance).getAll();
 
     localsResult.when(
       onOk: (locals) {

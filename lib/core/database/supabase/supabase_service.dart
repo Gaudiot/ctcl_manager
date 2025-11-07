@@ -2,20 +2,6 @@ import "package:ctcl_manager/core/database/interface.database.dart";
 import "package:ctcl_manager/core/variables/envs.dart";
 import "package:supabase_flutter/supabase_flutter.dart";
 
-enum SupabaseTables {
-  classes("classes"),
-  students("students"),
-  locals("locals"),
-  lessons("lessons"),
-  lessonsStudents("lessons_students");
-
-  final String _name;
-
-  const SupabaseTables(this._name);
-
-  String get name => _name;
-}
-
 final class SupabaseService implements IDatabaseClient {
   SupabaseService._internal();
 

@@ -2,14 +2,16 @@ import "package:ctcl_manager/base/DAOs/errors/local.dao_error.dart";
 import "package:ctcl_manager/base/DAOs/interface.dao.dart";
 import "package:ctcl_manager/base/DAOs/models/local.dao_model.dart";
 import "package:ctcl_manager/core/database/interface.database.dart";
-import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
+import "package:ctcl_manager/core/database/table_name.database.dart";
 import "package:ctcl_manager/core/variables/result_type.dart";
 
 final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
   @override
   final IDatabaseClient databaseClient;
+  @override
+  String get tableName => TableNames.v1.locals;
 
-  const LocalDAO(this.databaseClient);
+  const LocalDAO({required this.databaseClient});
 
   // MARK: - Create
 
@@ -18,7 +20,7 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
     LocalDAOModel data,
   ) async {
     LocalDAOError? daoError;
-    final response = await databaseClient.insert(SupabaseTables.locals.name, {
+    final response = await databaseClient.insert(tableName, {
       "name": data.name,
     }).onError((error, _) {
       daoError = LocalDAOError(
@@ -42,9 +44,7 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
   @override
   Future<Result<List<LocalDAOModel>, LocalDAOError>> getAll() async {
     LocalDAOError? daoError;
-    final response = await databaseClient
-        .get(SupabaseTables.locals.name)
-        .onError((error, _) {
+    final response = await databaseClient.get(tableName).onError((error, _) {
       daoError = LocalDAOError(
         message: "Error fetching locals from Supabase",
         original: error,
@@ -68,9 +68,8 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
   @override
   Future<Result<LocalDAOModel, LocalDAOError>> getById(String id) async {
     LocalDAOError? daoError;
-    final response = await databaseClient
-        .getById(SupabaseTables.locals.name, id)
-        .onError((error, _) {
+    final response =
+        await databaseClient.getById(tableName, id).onError((error, _) {
       daoError = LocalDAOError(
         message: "Error fetching local from database",
         original: error,
@@ -93,8 +92,7 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
     LocalDAOModel data,
   ) async {
     LocalDAOError? daoError;
-    final response =
-        await databaseClient.updateById(SupabaseTables.locals.name, id, {
+    final response = await databaseClient.updateById(tableName, id, {
       "name": data.name,
     }).onError((error, _) {
       daoError = LocalDAOError(
@@ -123,9 +121,7 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
   @override
   Future<Result<void, LocalDAOError>> deleteById(String id) async {
     LocalDAOError? daoError;
-    await databaseClient
-        .deleteById(SupabaseTables.locals.name, id)
-        .onError((error, _) {
+    await databaseClient.deleteById(tableName, id).onError((error, _) {
       daoError = LocalDAOError(
         message: "Error deleting local from Supabase",
         original: error,

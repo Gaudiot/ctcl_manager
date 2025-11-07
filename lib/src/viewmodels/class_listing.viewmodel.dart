@@ -18,7 +18,8 @@ class ClassListingViewModel {
 
   Future<void> getClasses() async {
     state.isLoading = true;
-    final classesResult = await ClassDAO(SupabaseService.instance).getAll();
+    final classesResult =
+        await ClassDAO(databaseClient: SupabaseService.instance).getAll();
 
     classesResult.when(
       onOk: (classes) {
@@ -27,8 +28,8 @@ class ClassListingViewModel {
               (classSumary) => ClassSumary(
                 id: classSumary.id,
                 name: classSumary.name,
-                local: "",
-                studentsQuantity: 0,
+                local: "Lorem",
+                studentsQuantity: 123,
               ),
             )
             .toList();
@@ -46,7 +47,8 @@ class ClassListingViewModel {
 
   Future<void> getClassesSummaryByName(String name) async {
     state.isLoading = true;
-    final classes = await ClassDAO(SupabaseService.instance).getAllByName(name);
+    final classes = await ClassDAO(databaseClient: SupabaseService.instance)
+        .getAllByName(name);
 
     classes.when(
       onOk: (classes) {
@@ -55,8 +57,8 @@ class ClassListingViewModel {
               (classSumary) => ClassSumary(
                 id: classSumary.id,
                 name: classSumary.name,
-                local: "",
-                studentsQuantity: 0,
+                local: "Ipsum",
+                studentsQuantity: 321,
               ),
             )
             .toList();

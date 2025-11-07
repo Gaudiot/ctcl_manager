@@ -2,14 +2,16 @@ import "package:ctcl_manager/base/DAOs/errors/student.dao_error.dart";
 import "package:ctcl_manager/base/DAOs/interface.dao.dart";
 import "package:ctcl_manager/base/DAOs/models/student.dao_model.dart";
 import "package:ctcl_manager/core/database/interface.database.dart";
-import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
+import "package:ctcl_manager/core/database/table_name.database.dart";
 import "package:ctcl_manager/core/variables/result_type.dart";
 
 final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
   @override
   final IDatabaseClient databaseClient;
+  @override
+  String get tableName => TableNames.v1.students;
 
-  const StudentDAO(this.databaseClient);
+  const StudentDAO({required this.databaseClient});
 
   // MARK: - Create
 
@@ -18,7 +20,7 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
     StudentDAOModel data,
   ) async {
     StudentDAOError? daoError;
-    final response = await databaseClient.insert(SupabaseTables.students.name, {
+    final response = await databaseClient.insert(tableName, {
       "first_name": data.firstName,
       "last_name": data.lastName,
       "phone": data.phone,
@@ -58,9 +60,7 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
   @override
   Future<Result<List<StudentDAOModel>, StudentDAOError>> getAll() async {
     StudentDAOError? daoError;
-    final response = await databaseClient
-        .get(SupabaseTables.students.name)
-        .onError((error, _) {
+    final response = await databaseClient.get(tableName).onError((error, _) {
       daoError = StudentDAOError(
         message: "Error fetching students from Supabase",
         original: error,
@@ -83,8 +83,7 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
   @override
   Future<Result<StudentDAOModel, StudentDAOError>> getById(String id) async {
     StudentDAOError? daoError;
-    final response =
-        await databaseClient.getById(SupabaseTables.students.name, id).onError(
+    final response = await databaseClient.getById(tableName, id).onError(
       (error, stackTrace) {
         daoError = StudentDAOError(
           message: "Error fetching student from Supabase",
@@ -112,8 +111,7 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
     StudentDAOModel data,
   ) async {
     StudentDAOError? daoError;
-    final response =
-        await databaseClient.updateById(SupabaseTables.students.name, id, {
+    final response = await databaseClient.updateById(tableName, id, {
       "first_name": data.firstName,
       "last_name": data.lastName,
       "phone": data.phone,
@@ -153,7 +151,7 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
   @override
   Future<Result<void, StudentDAOError>> deleteById(String id) async {
     StudentDAOError? daoError;
-    await databaseClient.deleteById(SupabaseTables.students.name, id).onError(
+    await databaseClient.deleteById(tableName, id).onError(
       (error, stackTrace) {
         daoError = StudentDAOError(
           message: "Error deleting student from Supabase",
