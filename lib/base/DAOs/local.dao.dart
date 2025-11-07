@@ -104,6 +104,32 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
   // MARK: - Read
 
   @override
+  Future<Result<List<LocalDAOModel>, LocalDAOError>> getAll() async {
+    LocalDAOError? daoError;
+    final response = await databaseClient
+        .get(SupabaseTables.locals.name)
+        .onError((error, _) {
+      daoError = LocalDAOError(
+        message: "Error fetching locals from Supabase",
+        original: error,
+      );
+      return [];
+    });
+
+    if (daoError != null) {
+      return Result.error(daoError);
+    }
+
+    final locals = response
+        .map(
+          (data) => LocalDAOModel.fromJson(data),
+        )
+        .toList();
+
+    return Result.ok(locals);
+  }
+
+  @override
   Future<Result<LocalDAOModel, LocalDAOError>> getById(String id) async {
     LocalDAOError? daoError;
     final response = await databaseClient
@@ -120,14 +146,7 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
       return Result.error(daoError);
     }
 
-    return Result.ok(
-      LocalDAOModel(
-        id: response["id"],
-        name: response["name"],
-        createdAt: DateTime.parse(response["created_at"]),
-        updatedAt: DateTime.parse(response["updated_at"]),
-      ),
-    );
+    return Result.ok(LocalDAOModel.fromJson(response));
   }
 
   // MARK: - Update

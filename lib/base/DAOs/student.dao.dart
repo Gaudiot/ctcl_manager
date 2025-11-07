@@ -60,7 +60,8 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
   // MARK: - Read
 
   static Future<Result<StudentDAOModel, StudentDAOError>> getStudentById(
-      String id) async {
+    String id,
+  ) async {
     StudentDAOError? daoError;
 
     final response = await SupabaseService.client
@@ -144,7 +145,8 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
   // MARK: - Delete
 
   static Future<Result<void, StudentDAOError>> deleteStudentById(
-      String id) async {
+    String id,
+  ) async {
     StudentDAOError? daoError;
 
     await SupabaseService.client
@@ -210,6 +212,31 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
   // MARK: - Read
 
   @override
+  Future<Result<List<StudentDAOModel>, StudentDAOError>> getAll() async {
+    StudentDAOError? daoError;
+    final response = await databaseClient
+        .get(SupabaseTables.students.name)
+        .onError((error, _) {
+      daoError = StudentDAOError(
+        message: "Error fetching students from Supabase",
+        original: error,
+      );
+      return [];
+    });
+
+    if (daoError != null) {
+      return Result.error(daoError);
+    }
+
+    final students = response
+        .map(
+          (data) => StudentDAOModel.fromJson(data),
+        )
+        .toList();
+    return Result.ok(students);
+  }
+
+  @override
   Future<Result<StudentDAOModel, StudentDAOError>> getById(String id) async {
     StudentDAOError? daoError;
     final response =
@@ -229,17 +256,7 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
     }
 
     return Result.ok(
-      StudentDAOModel(
-        id: response["id"],
-        firstName: response["first_name"],
-        lastName: response["last_name"],
-        phone: response["phone"],
-        emailAddress: response["email_address"],
-        birthday: DateTime.parse(response["birthday"]),
-        instagram: response["instagram"],
-        createdAt: DateTime.parse(response["created_at"]),
-        updatedAt: DateTime.parse(response["updated_at"]),
-      ),
+      StudentDAOModel.fromJson(response),
     );
   }
 

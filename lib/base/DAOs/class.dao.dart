@@ -25,7 +25,7 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
       "name": name,
       "description": description,
       "value_hundred": valueHundred,
-      "local_id": localId
+      "local_id": localId,
     }).onError((error, stackTrace) {
       daoError = ClassDAOError(
         message: "Error creating class in Supabase",
@@ -130,14 +130,7 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
     }
 
     return Result.ok(
-      ClassDAOModel(
-        id: response[0]["id"],
-        name: response[0]["name"],
-        description: response[0]["description"],
-        valueHundred: response[0]["value_hundred"],
-        localId: response[0]["local_id"],
-        localName: response[0]["local"]["name"],
-      ),
+      ClassDAOModel.fromJson(response[0]),
     );
   }
 
@@ -224,18 +217,34 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
     }
 
     return Result.ok(
-      ClassDAOModel(
-        id: response["id"],
-        name: response["name"],
-        description: response["description"],
-        valueHundred: response["value_hundred"],
-        localId: response["local_id"],
-        localName: response["local"]["name"],
-      ),
+      ClassDAOModel.fromJson(response),
     );
   }
 
   // MARK: - Read
+
+  @override
+  Future<Result<List<ClassDAOModel>, ClassDAOError>> getAll() async {
+    ClassDAOError? daoError;
+    final response = await databaseClient
+        .get(SupabaseTables.classes.name)
+        .onError((error, _) {
+      daoError = ClassDAOError(
+        message: "Error fetching classes from Supabase",
+        original: error,
+      );
+      return [];
+    });
+
+    if (daoError != null) {
+      return Result.error(daoError);
+    }
+
+    final classes =
+        response.map((data) => ClassDAOModel.fromJson(data)).toList();
+
+    return Result.ok(classes);
+  }
 
   @override
   Future<Result<ClassDAOModel, ClassDAOError>> getById(String id) async {
@@ -255,14 +264,7 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
     }
 
     return Result.ok(
-      ClassDAOModel(
-        id: response["id"],
-        name: response["name"],
-        description: response["description"],
-        valueHundred: response["value_hundred"],
-        localId: response["local_id"],
-        localName: response["local"]["name"],
-      ),
+      ClassDAOModel.fromJson(response),
     );
   }
 
@@ -270,7 +272,9 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
 
   @override
   Future<Result<ClassDAOModel, ClassDAOError>> updateById(
-      String id, ClassDAOModel data) async {
+    String id,
+    ClassDAOModel data,
+  ) async {
     ClassDAOError? daoError;
 
     final response =
@@ -293,14 +297,7 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
     }
 
     return Result.ok(
-      ClassDAOModel(
-        id: response["id"],
-        name: response["name"],
-        description: response["description"],
-        valueHundred: response["value_hundred"],
-        localId: response["local_id"],
-        localName: response["local"]["name"],
-      ),
+      ClassDAOModel.fromJson(response),
     );
   }
 

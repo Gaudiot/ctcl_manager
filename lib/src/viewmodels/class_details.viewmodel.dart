@@ -31,8 +31,8 @@ final class ClassDetailsViewModel {
       onOk: (classData) {
         state.name = classData.name;
         state.description = classData.description;
-        state.valueHundred = classData.valueHundred;
-        state.localId = classData.localId;
+        state.valueHundred = classData.valueHundred ?? 0;
+        state.localId = classData.localId ?? "";
 
         state.isLoading = false;
       },
