@@ -1,14 +1,13 @@
 import "package:ctcl_manager/base/DAOs/errors/student.dao_error.dart";
 import "package:ctcl_manager/base/DAOs/interface.dao.dart";
 import "package:ctcl_manager/base/DAOs/models/student.dao_model.dart";
+import "package:ctcl_manager/core/database/interface.database.dart";
 import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
 import "package:ctcl_manager/core/variables/result_type.dart";
-import "package:supabase_flutter/supabase_flutter.dart";
-import "package:uuid/uuid.dart";
 
 final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
   @override
-  final SupabaseClient databaseClient;
+  final IDatabaseClient databaseClient;
 
   const StudentDAO(this.databaseClient);
 
@@ -22,21 +21,16 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
     required DateTime birthday,
     required String instagram,
   }) async {
-    final id = Uuid().v4();
-    final timestamp = DateTime.now().toIso8601String();
-
     StudentDAOError? daoError;
 
-    await SupabaseService.client.from(SupabaseTables.students.name).insert({
-      "id": id,
+    final response =
+        await SupabaseService.client.from(SupabaseTables.students.name).insert({
       "first_name": firstName,
       "last_name": lastName,
       "phone": phone,
       "email_address": emailAddress,
       "birthday": birthday,
       "instagram": instagram,
-      "created_at": timestamp,
-      "updated_at": timestamp,
     }).onError((error, stackTrace) {
       daoError = StudentDAOError(
         message: "Error creating student in Supabase",
@@ -50,15 +44,15 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
 
     return Result.ok(
       StudentDAOModel(
-        id: id,
-        firstName: firstName,
+        id: response["id"],
+        firstName: response["first_name"],
         lastName: lastName,
-        phone: phone,
-        emailAddress: emailAddress,
-        birthday: birthday,
-        instagram: instagram,
-        createdAt: DateTime.parse(timestamp),
-        updatedAt: DateTime.parse(timestamp),
+        phone: response["phone"],
+        emailAddress: response["email_address"],
+        birthday: DateTime.parse(response["birthday"]),
+        instagram: response["instagram"],
+        createdAt: DateTime.parse(response["created_at"]),
+        updatedAt: DateTime.parse(response["updated_at"]),
       ),
     );
   }
@@ -178,8 +172,7 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
     StudentDAOModel data,
   ) async {
     StudentDAOError? daoError;
-    final response =
-        await databaseClient.from(SupabaseTables.students.name).insert({
+    final response = await databaseClient.insert(SupabaseTables.students.name, {
       "first_name": data.firstName,
       "last_name": data.lastName,
       "phone": data.phone,
@@ -191,6 +184,8 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
         message: "Error creating student from Supabase",
         original: error,
       );
+
+      return {};
     });
 
     if (daoError != null) {
@@ -199,15 +194,15 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
 
     return Result.ok(
       StudentDAOModel(
-        id: response[0]["id"],
-        firstName: response[0]["first_name"],
-        lastName: response[0]["last_name"],
-        phone: response[0]["phone"],
-        emailAddress: response[0]["email_address"],
-        birthday: DateTime.parse(response[0]["birthday"]),
-        instagram: response[0]["instagram"],
-        createdAt: DateTime.parse(response[0]["created_at"]),
-        updatedAt: DateTime.parse(response[0]["updated_at"]),
+        id: response["id"],
+        firstName: response["first_name"],
+        lastName: response["last_name"],
+        phone: response["phone"],
+        emailAddress: response["email_address"],
+        birthday: DateTime.parse(response["birthday"]),
+        instagram: response["instagram"],
+        createdAt: DateTime.parse(response["created_at"]),
+        updatedAt: DateTime.parse(response["updated_at"]),
       ),
     );
   }
@@ -217,19 +212,17 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
   @override
   Future<Result<StudentDAOModel, StudentDAOError>> getById(String id) async {
     StudentDAOError? daoError;
-    final response = await databaseClient
-        .from(SupabaseTables.students.name)
-        .select(
-          "id, first_name, last_name, phone, email_address, birthday, instagram, created_at, updated_at",
-        )
-        .eq("id", id)
-        .onError((error, stackTrace) {
-      daoError = StudentDAOError(
-        message: "Error fetching student from Supabase",
-        original: error,
-      );
-      return [];
-    });
+    final response =
+        await databaseClient.getById(SupabaseTables.students.name, id).onError(
+      (error, stackTrace) {
+        daoError = StudentDAOError(
+          message: "Error fetching student from Supabase",
+          original: error,
+        );
+
+        return {};
+      },
+    );
 
     if (daoError != null) {
       return Result.error(daoError);
@@ -237,15 +230,15 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
 
     return Result.ok(
       StudentDAOModel(
-        id: response[0]["id"],
-        firstName: response[0]["first_name"],
-        lastName: response[0]["last_name"],
-        phone: response[0]["phone"],
-        emailAddress: response[0]["email_address"],
-        birthday: DateTime.parse(response[0]["birthday"]),
-        instagram: response[0]["instagram"],
-        createdAt: DateTime.parse(response[0]["created_at"]),
-        updatedAt: DateTime.parse(response[0]["updated_at"]),
+        id: response["id"],
+        firstName: response["first_name"],
+        lastName: response["last_name"],
+        phone: response["phone"],
+        emailAddress: response["email_address"],
+        birthday: DateTime.parse(response["birthday"]),
+        instagram: response["instagram"],
+        createdAt: DateTime.parse(response["created_at"]),
+        updatedAt: DateTime.parse(response["updated_at"]),
       ),
     );
   }
@@ -258,25 +251,22 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
     StudentDAOModel data,
   ) async {
     StudentDAOError? daoError;
-    final response = await databaseClient
-        .from(SupabaseTables.students.name)
-        .update({
-          "first_name": data.firstName,
-          "last_name": data.lastName,
-          "phone": data.phone,
-          "email_address": data.emailAddress,
-          "birthday": data.birthday,
-          "instagram": data.instagram,
-          "updated_at": DateTime.now().toIso8601String(),
-        })
-        .eq("id", id)
-        .onError((error, stackTrace) {
-          daoError = StudentDAOError(
-            message: "Error updating student from Supabase",
-            original: error,
-          );
-          return [];
-        });
+    final response =
+        await databaseClient.updateById(SupabaseTables.students.name, id, {
+      "first_name": data.firstName,
+      "last_name": data.lastName,
+      "phone": data.phone,
+      "email_address": data.emailAddress,
+      "birthday": data.birthday,
+      "instagram": data.instagram,
+      "updated_at": DateTime.now().toIso8601String(),
+    }).onError((error, stackTrace) {
+      daoError = StudentDAOError(
+        message: "Error updating student from Supabase",
+        original: error,
+      );
+      return {};
+    });
 
     if (daoError != null) {
       return Result.error(daoError);
@@ -284,15 +274,15 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
 
     return Result.ok(
       StudentDAOModel(
-        id: response[0]["id"],
-        firstName: response[0]["first_name"],
-        lastName: response[0]["last_name"],
-        phone: response[0]["phone"],
-        emailAddress: response[0]["email_address"],
-        birthday: DateTime.parse(response[0]["birthday"]),
-        instagram: response[0]["instagram"],
-        createdAt: DateTime.parse(response[0]["created_at"]),
-        updatedAt: DateTime.parse(response[0]["updated_at"]),
+        id: response["id"],
+        firstName: response["first_name"],
+        lastName: response["last_name"],
+        phone: response["phone"],
+        emailAddress: response["email_address"],
+        birthday: DateTime.parse(response["birthday"]),
+        instagram: response["instagram"],
+        createdAt: DateTime.parse(response["created_at"]),
+        updatedAt: DateTime.parse(response["updated_at"]),
       ),
     );
   }
@@ -302,16 +292,14 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
   @override
   Future<Result<void, StudentDAOError>> deleteById(String id) async {
     StudentDAOError? daoError;
-    await databaseClient
-        .from(SupabaseTables.students.name)
-        .delete()
-        .eq("id", id)
-        .onError((error, stackTrace) {
-      daoError = StudentDAOError(
-        message: "Error deleting student from Supabase",
-        original: error,
-      );
-    });
+    await databaseClient.deleteById(SupabaseTables.students.name, id).onError(
+      (error, stackTrace) {
+        daoError = StudentDAOError(
+          message: "Error deleting student from Supabase",
+          original: error,
+        );
+      },
+    );
 
     if (daoError != null) {
       return Result.error(daoError);

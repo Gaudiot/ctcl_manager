@@ -1,14 +1,13 @@
 import "package:ctcl_manager/base/DAOs/errors/class.dao_error.dart";
 import "package:ctcl_manager/base/DAOs/interface.dao.dart";
 import "package:ctcl_manager/base/DAOs/models/class.dao_model.dart";
+import "package:ctcl_manager/core/database/interface.database.dart";
 import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
 import "package:ctcl_manager/core/variables/result_type.dart";
-import "package:supabase_flutter/supabase_flutter.dart";
-import "package:uuid/uuid.dart";
 
 final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
   @override
-  final SupabaseClient databaseClient;
+  final IDatabaseClient databaseClient;
 
   const ClassDAO(this.databaseClient);
 
@@ -20,19 +19,13 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
     required String localId,
     String? description,
   }) async {
-    final id = Uuid().v4();
-    final timestamp = DateTime.now().toIso8601String();
-
     ClassDAOError? daoError;
 
     await SupabaseService.client.from(SupabaseTables.classes.name).insert({
-      "id": id,
       "name": name,
       "description": description,
       "value_hundred": valueHundred,
-      "local_id": localId,
-      "created_at": timestamp,
-      "updated_at": timestamp,
+      "local_id": localId
     }).onError((error, stackTrace) {
       daoError = ClassDAOError(
         message: "Error creating class in Supabase",
@@ -212,8 +205,7 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
   ) async {
     ClassDAOError? daoError;
 
-    final response =
-        await databaseClient.from(SupabaseTables.classes.name).insert({
+    final response = await databaseClient.insert(SupabaseTables.classes.name, {
       "name": data.name,
       "description": data.description,
       "value_hundred": data.valueHundred,
@@ -223,6 +215,8 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
         message: "Error creating class in Supabase",
         original: error,
       );
+
+      return {};
     });
 
     if (daoError != null) {
@@ -231,12 +225,12 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
 
     return Result.ok(
       ClassDAOModel(
-        id: response[0]["id"],
-        name: response[0]["name"],
-        description: response[0]["description"],
-        valueHundred: response[0]["value_hundred"],
-        localId: response[0]["local_id"],
-        localName: response[0]["local"]["name"],
+        id: response["id"],
+        name: response["name"],
+        description: response["description"],
+        valueHundred: response["value_hundred"],
+        localId: response["local_id"],
+        localName: response["local"]["name"],
       ),
     );
   }
@@ -247,17 +241,13 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
   Future<Result<ClassDAOModel, ClassDAOError>> getById(String id) async {
     ClassDAOError? daoError;
     final response = await databaseClient
-        .from(SupabaseTables.classes.name)
-        .select(
-          "id, name, description, value_hundred, local_id, local:locals(name)",
-        )
-        .eq("id", id)
+        .getById(SupabaseTables.classes.name, id)
         .onError((error, _) {
       daoError = ClassDAOError(
         message: "Error fetching class from Supabase",
         original: error,
       );
-      return [];
+      return {};
     });
 
     if (daoError != null) {
@@ -266,12 +256,12 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
 
     return Result.ok(
       ClassDAOModel(
-        id: response[0]["id"],
-        name: response[0]["name"],
-        description: response[0]["description"],
-        valueHundred: response[0]["value_hundred"],
-        localId: response[0]["local_id"],
-        localName: response[0]["local"]["name"],
+        id: response["id"],
+        name: response["name"],
+        description: response["description"],
+        valueHundred: response["value_hundred"],
+        localId: response["local_id"],
+        localName: response["local"]["name"],
       ),
     );
   }
@@ -283,21 +273,20 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
       String id, ClassDAOModel data) async {
     ClassDAOError? daoError;
 
-    final response = await databaseClient
-        .from(SupabaseTables.classes.name)
-        .update({
-          "name": data.name,
-          "description": data.description,
-          "value_hundred": data.valueHundred,
-          "local_id": data.localId,
-        })
-        .eq("id", id)
-        .onError((error, _) {
-          daoError = ClassDAOError(
-            message: "Error updating class from Supabase",
-            original: error,
-          );
-        });
+    final response =
+        await databaseClient.updateById(SupabaseTables.classes.name, id, {
+      "name": data.name,
+      "description": data.description,
+      "value_hundred": data.valueHundred,
+      "local_id": data.localId,
+    }).onError((error, _) {
+      daoError = ClassDAOError(
+        message: "Error updating class from Supabase",
+        original: error,
+      );
+
+      return {};
+    });
 
     if (daoError != null) {
       return Result.error(daoError);
@@ -305,12 +294,12 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
 
     return Result.ok(
       ClassDAOModel(
-        id: response[0]["id"],
-        name: response[0]["name"],
-        description: response[0]["description"],
-        valueHundred: response[0]["value_hundred"],
-        localId: response[0]["local_id"],
-        localName: response[0]["local"]["name"],
+        id: response["id"],
+        name: response["name"],
+        description: response["description"],
+        valueHundred: response["value_hundred"],
+        localId: response["local_id"],
+        localName: response["local"]["name"],
       ),
     );
   }
@@ -321,9 +310,7 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
   Future<Result<void, ClassDAOError>> deleteById(String id) async {
     ClassDAOError? daoError;
     await databaseClient
-        .from(SupabaseTables.classes.name)
-        .delete()
-        .eq("id", id)
+        .deleteById(SupabaseTables.classes.name, id)
         .onError((error, _) {
       daoError = ClassDAOError(
         message: "Error deleting class from Supabase",

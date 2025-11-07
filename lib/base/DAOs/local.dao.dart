@@ -1,14 +1,13 @@
 import "package:ctcl_manager/base/DAOs/errors/local.dao_error.dart";
 import "package:ctcl_manager/base/DAOs/interface.dao.dart";
 import "package:ctcl_manager/base/DAOs/models/local.dao_model.dart";
+import "package:ctcl_manager/core/database/interface.database.dart";
 import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
 import "package:ctcl_manager/core/variables/result_type.dart";
-import "package:supabase_flutter/supabase_flutter.dart";
-import "package:uuid/uuid.dart";
 
 final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
   @override
-  final SupabaseClient databaseClient;
+  final IDatabaseClient databaseClient;
 
   const LocalDAO(this.databaseClient);
 
@@ -17,16 +16,11 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
   static Future<Result<LocalSummaryDAOModel, LocalDAOError>> addLocal(
     String name,
   ) async {
-    final id = Uuid().v4();
-    final timestamp = DateTime.now().toIso8601String();
-
     LocalDAOError? daoError;
 
-    await SupabaseService.client.from(SupabaseTables.locals.name).insert({
-      "id": id,
+    final response =
+        await SupabaseService.client.from(SupabaseTables.locals.name).insert({
       "name": name,
-      "created_at": timestamp,
-      "updated_at": timestamp,
     }).onError((error, stackTrace) {
       daoError = LocalDAOError(
         message: "Error creating local in Supabase",
@@ -38,7 +32,12 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
       return Result.error(daoError);
     }
 
-    return Result.ok(LocalSummaryDAOModel(id: id, name: name));
+    return Result.ok(
+      LocalSummaryDAOModel(
+        id: response["id"],
+        name: response["name"],
+      ),
+    );
   }
 
   // MARK: - Read
@@ -78,15 +77,14 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
     LocalDAOModel data,
   ) async {
     LocalDAOError? daoError;
-    final response =
-        await databaseClient.from(SupabaseTables.locals.name).insert({
+    final response = await databaseClient.insert(SupabaseTables.locals.name, {
       "name": data.name,
     }).onError((error, _) {
       daoError = LocalDAOError(
         message: "Error creating local from Supabase",
         original: error,
       );
-      return [];
+      return {};
     });
 
     if (daoError != null) {
@@ -95,10 +93,10 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
 
     return Result.ok(
       LocalDAOModel(
-        id: response[0]["id"],
-        name: response[0]["name"],
-        createdAt: DateTime.parse(response[0]["created_at"]),
-        updatedAt: DateTime.parse(response[0]["updated_at"]),
+        id: response["id"],
+        name: response["name"],
+        createdAt: DateTime.parse(response["created_at"]),
+        updatedAt: DateTime.parse(response["updated_at"]),
       ),
     );
   }
@@ -109,17 +107,13 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
   Future<Result<LocalDAOModel, LocalDAOError>> getById(String id) async {
     LocalDAOError? daoError;
     final response = await databaseClient
-        .from(SupabaseTables.locals.name)
-        .select(
-          "id, name, created_at, updated_at",
-        )
-        .eq("id", id)
+        .getById(SupabaseTables.locals.name, id)
         .onError((error, _) {
       daoError = LocalDAOError(
-        message: "Error fetching local from Supabase",
+        message: "Error fetching local from database",
         original: error,
       );
-      return [];
+      return {};
     });
 
     if (daoError != null) {
@@ -128,10 +122,10 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
 
     return Result.ok(
       LocalDAOModel(
-        id: response[0]["id"],
-        name: response[0]["name"],
-        createdAt: DateTime.parse(response[0]["created_at"]),
-        updatedAt: DateTime.parse(response[0]["updated_at"]),
+        id: response["id"],
+        name: response["name"],
+        createdAt: DateTime.parse(response["created_at"]),
+        updatedAt: DateTime.parse(response["updated_at"]),
       ),
     );
   }
@@ -144,19 +138,16 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
     LocalDAOModel data,
   ) async {
     LocalDAOError? daoError;
-    final response = await databaseClient
-        .from(SupabaseTables.locals.name)
-        .update({
-          "name": data.name,
-        })
-        .eq("id", id)
-        .onError((error, _) {
-          daoError = LocalDAOError(
-            message: "Error updating local from Supabase",
-            original: error,
-          );
-          return [];
-        });
+    final response =
+        await databaseClient.updateById(SupabaseTables.locals.name, id, {
+      "name": data.name,
+    }).onError((error, _) {
+      daoError = LocalDAOError(
+        message: "Error updating local from Supabase",
+        original: error,
+      );
+      return {};
+    });
 
     if (daoError != null) {
       return Result.error(daoError);
@@ -164,10 +155,10 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
 
     return Result.ok(
       LocalDAOModel(
-        id: response[0]["id"],
-        name: response[0]["name"],
-        createdAt: DateTime.parse(response[0]["created_at"]),
-        updatedAt: DateTime.parse(response[0]["updated_at"]),
+        id: response["id"],
+        name: response["name"],
+        createdAt: DateTime.parse(response["created_at"]),
+        updatedAt: DateTime.parse(response["updated_at"]),
       ),
     );
   }
@@ -178,9 +169,7 @@ final class LocalDAO implements BaseDAO<LocalDAOModel, LocalDAOError> {
   Future<Result<void, LocalDAOError>> deleteById(String id) async {
     LocalDAOError? daoError;
     await databaseClient
-        .from(SupabaseTables.locals.name)
-        .delete()
-        .eq("id", id)
+        .deleteById(SupabaseTables.locals.name, id)
         .onError((error, _) {
       daoError = LocalDAOError(
         message: "Error deleting local from Supabase",
