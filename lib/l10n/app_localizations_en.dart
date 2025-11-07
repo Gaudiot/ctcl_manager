@@ -21,6 +21,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get classes_loading_error => 'Error loading classes';
 
   @override
+  String get students => 'Students';
+
+  @override
   String get class_name => 'Class name';
 
   @override
