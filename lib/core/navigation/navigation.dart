@@ -4,6 +4,7 @@ import "package:ctcl_manager/src/viewmodels/create_class.viewmodel.dart";
 import "package:ctcl_manager/src/views/class_details.view.dart";
 import "package:ctcl_manager/src/views/class_listing.view.dart";
 import "package:ctcl_manager/src/views/create_class.view.dart";
+import "package:ctcl_manager/src/views/home.view.dart";
 import "package:ctcl_manager/src/views/viewstates/class_details.viewstate.dart";
 import "package:ctcl_manager/src/views/viewstates/class_listing.viewstate.dart";
 import "package:ctcl_manager/src/views/viewstates/create_class.viewstate.dart";
@@ -12,6 +13,7 @@ import "package:flutter/material.dart";
 typedef RouteBuilder = Widget Function(BuildContext context);
 
 enum NavigationRoutes {
+  home("/home"),
   createClass("/create_class"),
   classListing("/class_listing"),
   classDetails("/class_details");
@@ -24,27 +26,27 @@ enum NavigationRoutes {
 class NavigationManager {
   NavigationManager._internal();
 
-  static String initialRoute = NavigationRoutes.classListing.path;
+  static String initialRoute = NavigationRoutes.home.path;
   static var _args = <String, dynamic>{};
 
   static Map<String, RouteBuilder> routesMap() {
     return {
+      NavigationRoutes.home.path: (context) => HomeView(),
       NavigationRoutes.classListing.path: (context) => ClassListingView(
-        viewModel: ClassListingViewModel(
-          context,
-          state: ClassListingViewState(classes: []),
-        ),
-      ),
+            viewModel: ClassListingViewModel(
+              context,
+              state: ClassListingViewState(classes: []),
+            ),
+          ),
       NavigationRoutes.createClass.path: (context) => CreateClassView(
-        viewModel: CreateClassViewModel(
-          context,
-          state: CreateClassViewState(locals: []),
-        ),
-      ),
+            viewModel: CreateClassViewModel(
+              context,
+              state: CreateClassViewState(locals: []),
+            ),
+          ),
       NavigationRoutes.classDetails.path: (context) {
-        final classId = _args.containsKey("classId")
-            ? _args["classId"]
-            : "falhou";
+        final classId =
+            _args.containsKey("classId") ? _args["classId"] : "falhou";
 
         return ClassDetailsView(
           classId: classId,

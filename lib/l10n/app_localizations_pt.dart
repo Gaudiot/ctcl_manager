@@ -21,6 +21,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get classes_loading_error => 'Erro ao carregar turmas';
 
   @override
+  String get students => 'Alunos';
+
+  @override
   String get class_name => 'Nome da turma';
 
   @override
