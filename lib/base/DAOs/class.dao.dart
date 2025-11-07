@@ -2,14 +2,16 @@ import "package:ctcl_manager/base/DAOs/errors/class.dao_error.dart";
 import "package:ctcl_manager/base/DAOs/interface.dao.dart";
 import "package:ctcl_manager/base/DAOs/models/class.dao_model.dart";
 import "package:ctcl_manager/core/database/interface.database.dart";
-import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
+import "package:ctcl_manager/core/database/table_name.database.dart";
 import "package:ctcl_manager/core/variables/result_type.dart";
 
 final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
   @override
   final IDatabaseClient databaseClient;
+  @override
+  String get tableName => TableNames.v1.classes;
 
-  const ClassDAO(this.databaseClient);
+  const ClassDAO({required this.databaseClient});
 
   // MARK: - Create
 
@@ -19,7 +21,7 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
   ) async {
     ClassDAOError? daoError;
 
-    final response = await databaseClient.insert(SupabaseTables.classes.name, {
+    final response = await databaseClient.insert(tableName, {
       "name": data.name,
       "description": data.description,
       "value_hundred": data.valueHundred,
@@ -48,9 +50,7 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
   Future<Result<List<ClassDAOModel>, ClassDAOError>> getAll() async {
     ClassDAOError? daoError;
 
-    final response = await databaseClient
-        .get(SupabaseTables.classes.name)
-        .onError((error, _) {
+    final response = await databaseClient.get(tableName).onError((error, _) {
       daoError = ClassDAOError(
         message: "Error fetching classes from Supabase",
         original: error,
@@ -73,9 +73,7 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
   ) async {
     ClassDAOError? daoError;
 
-    final response = await databaseClient
-        .get(SupabaseTables.classes.name)
-        .onError((error, _) {
+    final response = await databaseClient.get(tableName).onError((error, _) {
       daoError = ClassDAOError(
         message: "Error fetching classes from Supabase",
         original: error,
@@ -99,9 +97,8 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
   @override
   Future<Result<ClassDAOModel, ClassDAOError>> getById(String id) async {
     ClassDAOError? daoError;
-    final response = await databaseClient
-        .getById(SupabaseTables.classes.name, id)
-        .onError((error, _) {
+    final response =
+        await databaseClient.getById(tableName, id).onError((error, _) {
       daoError = ClassDAOError(
         message: "Error fetching class from Supabase",
         original: error,
@@ -127,8 +124,7 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
   ) async {
     ClassDAOError? daoError;
 
-    final response =
-        await databaseClient.updateById(SupabaseTables.classes.name, id, {
+    final response = await databaseClient.updateById(tableName, id, {
       "name": data.name,
       "description": data.description,
       "value_hundred": data.valueHundred,
@@ -156,9 +152,7 @@ final class ClassDAO implements BaseDAO<ClassDAOModel, ClassDAOError> {
   @override
   Future<Result<void, ClassDAOError>> deleteById(String id) async {
     ClassDAOError? daoError;
-    await databaseClient
-        .deleteById(SupabaseTables.classes.name, id)
-        .onError((error, _) {
+    await databaseClient.deleteById(tableName, id).onError((error, _) {
       daoError = ClassDAOError(
         message: "Error deleting class from Supabase",
         original: error,

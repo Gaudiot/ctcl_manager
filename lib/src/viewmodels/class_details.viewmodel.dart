@@ -27,7 +27,8 @@ final class ClassDetailsViewModel {
 
   Future<void> getClassById(String id) async {
     state.isLoading = true;
-    final classResult = await ClassDAO(SupabaseService.instance).getById(id);
+    final classResult =
+        await ClassDAO(databaseClient: SupabaseService.instance).getById(id);
 
     classResult.when(
       onOk: (classData) {
@@ -50,7 +51,8 @@ final class ClassDetailsViewModel {
 
   Future<void> getLocals() async {
     state.isLoading = true;
-    final localsResult = await LocalDAO(SupabaseService.instance).getAll();
+    final localsResult =
+        await LocalDAO(databaseClient: SupabaseService.instance).getAll();
 
     localsResult.when(
       onOk: (locals) {
@@ -78,8 +80,8 @@ final class ClassDetailsViewModel {
   // MARK: - Data
 
   Future<void> deleteClass(BuildContext context, String classId) async {
-    final response =
-        await ClassDAO(SupabaseService.instance).deleteById(classId);
+    final response = await ClassDAO(databaseClient: SupabaseService.instance)
+        .deleteById(classId);
     response.when(
       onOk: (data) {
         NavigationManager.popWithConfirm(context);
@@ -101,7 +103,8 @@ final class ClassDetailsViewModel {
     required int valueHundred,
     required String localId,
   }) async {
-    final response = await ClassDAO(SupabaseService.instance).updateById(
+    final response =
+        await ClassDAO(databaseClient: SupabaseService.instance).updateById(
       classId,
       ClassDAOModel(
         id: classId,
