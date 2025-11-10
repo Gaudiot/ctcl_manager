@@ -24,6 +24,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get students => 'Alunos';
 
   @override
+  String get new_student => '+ Aluno';
+
+  @override
   String get class_name => 'Nome da turma';
 
   @override

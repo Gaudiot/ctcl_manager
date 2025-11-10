@@ -4,6 +4,7 @@
   "new_class": "+ Turma",
   "classes_loading_error": "Erro ao carregar turmas",
   "students": "Alunos",
+  "new_student": "+ Aluno",
   "class_name": "Nome da turma",
   "class_description": "Descrição da turma",
   "create_class": "Criar Turma",
