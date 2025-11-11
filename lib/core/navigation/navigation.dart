@@ -5,6 +5,7 @@ import "package:ctcl_manager/src/views/class_details.view.dart";
 import "package:ctcl_manager/src/views/class_listing.view.dart";
 import "package:ctcl_manager/src/views/create_class.view.dart";
 import "package:ctcl_manager/src/views/home.view.dart";
+import "package:ctcl_manager/src/views/students_listing.view.dart";
 import "package:ctcl_manager/src/views/viewstates/class_details.viewstate.dart";
 import "package:ctcl_manager/src/views/viewstates/class_listing.viewstate.dart";
 import "package:ctcl_manager/src/views/viewstates/create_class.viewstate.dart";
@@ -16,7 +17,8 @@ enum NavigationRoutes {
   home("/home"),
   createClass("/create_class"),
   classListing("/class_listing"),
-  classDetails("/class_details");
+  classDetails("/class_details"),
+  studentsListing("/students_listing");
 
   final String path;
 
@@ -56,6 +58,7 @@ class NavigationManager {
           ),
         );
       },
+      NavigationRoutes.studentsListing.path: (context) => StudentsListing()
     };
   }
 

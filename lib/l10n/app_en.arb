@@ -4,6 +4,7 @@
   "new_class": "+ Class",
   "classes_loading_error": "Error loading classes",
   "students": "Students",
+  "new_student": "+ Student",
   "class_name": "Class name",
   "class_description": "Class description",
   "create_class": "Create Class",
