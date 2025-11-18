@@ -16,3 +16,12 @@ gen-strings:
 		echo "Missing translations found"; \
 		exit 1; \
 	fi
+
+gen-launcher-icons:
+	flutter pub run flutter_launcher_icons
+	@if [ -f android/app/src/main/res/mipmap-mdpi/ic_launcher.png ] && [ -f android/app/src/main/res/mipmap-hdpi/ic_launcher.png ] && [ -f android/app/src/main/res/mipmap-xhdpi/ic_launcher.png ] && [ -f android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png ] && [ -f android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png ]; then \
+		echo "Launcher icons generated successfully."; \
+	else \
+		echo "Failed to generate launcher icons."; \
+		exit 1; \
+	fi
