@@ -1,3 +1,6 @@
+import "package:ctcl_manager/core/database/mock.database.dart";
+import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
+import "package:ctcl_manager/core/variables/envs.dart";
 import "package:ctcl_manager/src/viewmodels/class_details.viewmodel.dart";
 import "package:ctcl_manager/src/viewmodels/class_listing.viewmodel.dart";
 import "package:ctcl_manager/src/viewmodels/create_class.viewmodel.dart";
@@ -32,18 +35,26 @@ class NavigationManager {
   static var _args = <String, dynamic>{};
 
   static Map<String, RouteBuilder> routesMap() {
+    final isProd = Envs.get(key: EnvsKeys.isProd) == "true";
+    final databaseClient =
+        isProd ? SupabaseService.instance : MockDatabaseClient.instance;
+
     return {
-      NavigationRoutes.home.path: (context) => HomeView(),
+      NavigationRoutes.home.path: (context) => HomeView(
+            databaseClient: databaseClient,
+          ),
       NavigationRoutes.classListing.path: (context) => ClassListingView(
             viewModel: ClassListingViewModel(
               context,
               state: ClassListingViewState(classes: []),
+              databaseClient: databaseClient,
             ),
           ),
       NavigationRoutes.createClass.path: (context) => CreateClassView(
             viewModel: CreateClassViewModel(
               context,
               state: CreateClassViewState(locals: []),
+              databaseClient: databaseClient,
             ),
           ),
       NavigationRoutes.classDetails.path: (context) {
@@ -55,10 +66,11 @@ class NavigationManager {
           viewModel: ClassDetailsViewModel(
             context,
             state: ClassDetailsViewState.empty(),
+            databaseClient: databaseClient,
           ),
         );
       },
-      NavigationRoutes.studentsListing.path: (context) => StudentsListing()
+      NavigationRoutes.studentsListing.path: (context) => StudentsListing(),
     };
   }
 

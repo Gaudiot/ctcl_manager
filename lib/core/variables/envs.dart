@@ -2,7 +2,8 @@ import "package:flutter_dotenv/flutter_dotenv.dart";
 
 enum EnvsKeys {
   supabaseUrl("SUPABASE_URL"),
-  supabaseAnonKey("SUPABASE_ANON_KEY");
+  supabaseAnonKey("SUPABASE_ANON_KEY"),
+  isProd("IS_PROD");
 
   final String _name;
 

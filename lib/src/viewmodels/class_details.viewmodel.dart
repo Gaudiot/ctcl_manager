@@ -1,7 +1,7 @@
 import "package:ctcl_manager/base/DAOs/class.dao.dart";
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
 import "package:ctcl_manager/base/DAOs/models/class.dao_model.dart";
-import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
+import "package:ctcl_manager/core/database/interface.database.dart";
 import "package:ctcl_manager/core/navigation/navigation.dart";
 import "package:ctcl_manager/core/notifications/toast.dart";
 import "package:ctcl_manager/l10n/localizations_extension.dart";
@@ -13,8 +13,13 @@ final class ClassDetailsViewModel {
   final ToastNotifications toast;
   final ClassDetailsViewState state;
 
-  ClassDetailsViewModel(this.context, {required this.state})
-      : toast = ToastNotifications(context: context);
+  final IDatabaseClient databaseClient;
+
+  ClassDetailsViewModel(
+    this.context, {
+    required this.state,
+    required this.databaseClient,
+  }) : toast = ToastNotifications(context: context);
 
   String get newLocalId => "new_local";
 
@@ -28,7 +33,7 @@ final class ClassDetailsViewModel {
   Future<void> getClassById(String id) async {
     state.isLoading = true;
     final classResult =
-        await ClassDAO(databaseClient: SupabaseService.instance).getById(id);
+        await ClassDAO(databaseClient: databaseClient).getById(id);
 
     classResult.when(
       onOk: (classData) {
@@ -52,7 +57,7 @@ final class ClassDetailsViewModel {
   Future<void> getLocals() async {
     state.isLoading = true;
     final localsResult =
-        await LocalDAO(databaseClient: SupabaseService.instance).getAll();
+        await LocalDAO(databaseClient: databaseClient).getAll();
 
     localsResult.when(
       onOk: (locals) {
@@ -80,8 +85,8 @@ final class ClassDetailsViewModel {
   // MARK: - Data
 
   Future<void> deleteClass(BuildContext context, String classId) async {
-    final response = await ClassDAO(databaseClient: SupabaseService.instance)
-        .deleteById(classId);
+    final response =
+        await ClassDAO(databaseClient: databaseClient).deleteById(classId);
     response.when(
       onOk: (data) {
         NavigationManager.popWithConfirm(context);
@@ -103,8 +108,7 @@ final class ClassDetailsViewModel {
     required int valueHundred,
     required String localId,
   }) async {
-    final response =
-        await ClassDAO(databaseClient: SupabaseService.instance).updateById(
+    final response = await ClassDAO(databaseClient: databaseClient).updateById(
       classId,
       ClassDAOModel(
         id: classId,

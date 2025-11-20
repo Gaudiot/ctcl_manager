@@ -1,4 +1,5 @@
 import "package:ctcl_manager/base/uicolors.dart";
+import "package:ctcl_manager/core/database/interface.database.dart";
 import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:ctcl_manager/src/viewmodels/class_listing.viewmodel.dart";
 import "package:ctcl_manager/src/views/class_listing.view.dart";
@@ -7,7 +8,12 @@ import "package:ctcl_manager/src/views/viewstates/class_listing.viewstate.dart";
 import "package:flutter/material.dart";
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final IDatabaseClient databaseClient;
+
+  const HomeView({
+    required this.databaseClient,
+    super.key,
+  });
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -16,15 +22,18 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int currentIndex = 0;
 
-  final pages = [
-    (BuildContext context) => ClassListingView(
-          viewModel: ClassListingViewModel(
-            context,
-            state: ClassListingViewState(classes: []),
-          ),
+  List<Widget> getPages(BuildContext context) {
+    return [
+      ClassListingView(
+        viewModel: ClassListingViewModel(
+          context,
+          state: ClassListingViewState(classes: []),
+          databaseClient: widget.databaseClient,
         ),
-    (BuildContext context) => StudentsListing(),
-  ];
+      ),
+      StudentsListing(),
+    ];
+  }
 
   List<BottomNavigationBarItem> getNavigationItems(BuildContext context) {
     return [
@@ -41,8 +50,10 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final pages = getPages(context);
+
     return Scaffold(
-      body: pages[currentIndex](context),
+      body: pages[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         backgroundColor: UIColors.primaryWhiteDarker,

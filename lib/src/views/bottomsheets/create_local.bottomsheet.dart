@@ -1,7 +1,7 @@
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
 import "package:ctcl_manager/base/DAOs/models/local.dao_model.dart";
 import "package:ctcl_manager/base/uicolors.dart";
-import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
+import "package:ctcl_manager/core/database/interface.database.dart";
 import "package:ctcl_manager/core/navigation/navigation.dart";
 import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:flutter/material.dart";
@@ -10,7 +10,13 @@ class CreateLocalBottomSheet extends StatelessWidget {
   final void Function({required String id, required String name}) onCreateLocal;
   final TextEditingController nameController = TextEditingController();
 
-  CreateLocalBottomSheet({required this.onCreateLocal, super.key});
+  final IDatabaseClient databaseClient;
+
+  CreateLocalBottomSheet({
+    required this.onCreateLocal,
+    required this.databaseClient,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +70,7 @@ class CreateLocalBottomSheet extends StatelessWidget {
               onPressed: () async {
                 final name = nameController.text;
                 final result =
-                    await LocalDAO(databaseClient: SupabaseService.instance)
-                        .create(
+                    await LocalDAO(databaseClient: databaseClient).create(
                   LocalDAOModel(
                     id: "",
                     name: name,

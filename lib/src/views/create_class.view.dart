@@ -1,3 +1,4 @@
+import "package:ctcl_manager/base/DAOs/local.dao.dart";
 import "package:ctcl_manager/base/components/locals_dropdown.dart";
 import "package:ctcl_manager/base/uicolors.dart";
 import "package:ctcl_manager/core/design/components/monetary_text_field.dart";
@@ -97,6 +98,9 @@ class _CreateClassViewState extends State<CreateClassView> {
                       MonetaryTextField(controller: classValueController),
                       SizedBox(height: 16),
                       LocalsDropdown(
+                        localDAO: LocalDAO(
+                          databaseClient: widget.viewModel.databaseClient,
+                        ),
                         controller: classLocalController,
                         errorMessage:
                             widget.viewModel.state.localField.errorMessage,
