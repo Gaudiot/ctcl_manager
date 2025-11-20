@@ -1,3 +1,4 @@
+import "package:ctcl_manager/base/DAOs/local.dao.dart";
 import "package:ctcl_manager/base/components/locals_dropdown.dart";
 import "package:ctcl_manager/base/uicolors.dart";
 import "package:ctcl_manager/core/design/components/monetary_text_field.dart";
@@ -30,8 +31,8 @@ class _ClassDetailsViewState extends State<ClassDetailsView> {
     widget.viewModel.init(widget.classId).then((_) {
       classNameController.text = widget.viewModel.state.name;
       classDescriptionController.text = widget.viewModel.state.description;
-      classValueController.valueInHundred = widget.viewModel.state.valueHundred
-          .toString();
+      classValueController.valueInHundred =
+          widget.viewModel.state.valueHundred.toString();
       classLocalController.value = widget.viewModel.state.localId;
     });
     super.initState();
@@ -93,7 +94,12 @@ class _ClassDetailsViewState extends State<ClassDetailsView> {
                   SizedBox(height: 16),
                   MonetaryTextField(controller: classValueController),
                   SizedBox(height: 16),
-                  LocalsDropdown(controller: classLocalController),
+                  LocalsDropdown(
+                    controller: classLocalController,
+                    localDAO: LocalDAO(
+                      databaseClient: widget.viewModel.databaseClient,
+                    ),
+                  ),
                   SizedBox(height: 16),
                   TextButton(
                     style: TextButton.styleFrom(

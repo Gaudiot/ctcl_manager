@@ -1,7 +1,6 @@
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
 import "package:ctcl_manager/base/DAOs/models/local.dao_model.dart";
 import "package:ctcl_manager/base/uicolors.dart";
-import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
 import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:ctcl_manager/src/views/bottomsheets/create_local.bottomsheet.dart";
 import "package:flutter/material.dart";
@@ -45,8 +44,14 @@ final class LocalsDropdownState with ChangeNotifier {
 class LocalsDropdown extends StatefulWidget {
   final String? errorMessage;
   final ValueNotifier<String?>? controller;
+  final LocalDAO localDAO;
 
-  const LocalsDropdown({this.errorMessage, this.controller, super.key});
+  const LocalsDropdown({
+    required this.localDAO,
+    this.errorMessage,
+    this.controller,
+    super.key,
+  });
 
   @override
   State<LocalsDropdown> createState() => _LocalsDropdownState();
@@ -76,14 +81,14 @@ class _LocalsDropdownState extends State<LocalsDropdown> {
 
   Future<void> _fetchLocals() async {
     state.isLoading = true;
-    final localsResult =
-        await LocalDAO(databaseClient: SupabaseService.instance).getAll();
+    final localsResult = await widget.localDAO.getAll();
 
     localsResult.when(
       onOk: (locals) {
         state.locals = locals
             .map(
-                (local) => LocalSummaryDAOModel(id: local.id, name: local.name))
+              (local) => LocalSummaryDAOModel(id: local.id, name: local.name),
+            )
             .toList();
         state.isLoading = false;
       },
@@ -98,6 +103,7 @@ class _LocalsDropdownState extends State<LocalsDropdown> {
       context: context,
       builder: (context) {
         return CreateLocalBottomSheet(
+          databaseClient: widget.localDAO.databaseClient,
           onCreateLocal: ({required id, required name}) {
             state.addLocal(id: id, name: name);
             onLocalCreated(id);

@@ -1,5 +1,5 @@
 import "package:ctcl_manager/base/DAOs/class.dao.dart";
-import "package:ctcl_manager/core/database/supabase/supabase_service.dart";
+import "package:ctcl_manager/core/database/interface.database.dart";
 import "package:ctcl_manager/core/navigation/navigation.dart";
 import "package:ctcl_manager/core/notifications/toast.dart";
 import "package:ctcl_manager/l10n/localizations_extension.dart";
@@ -11,15 +11,20 @@ class ClassListingViewModel {
   final ToastNotifications toast;
   final ClassListingViewState state;
 
-  ClassListingViewModel(this.context, {required this.state})
-      : toast = ToastNotifications(context: context);
+  final IDatabaseClient databaseClient;
+
+  ClassListingViewModel(
+    this.context, {
+    required this.state,
+    required this.databaseClient,
+  }) : toast = ToastNotifications(context: context);
 
   // MARK: - Fetch Data
 
   Future<void> getClasses() async {
     state.isLoading = true;
     final classesResult =
-        await ClassDAO(databaseClient: SupabaseService.instance).getAll();
+        await ClassDAO(databaseClient: databaseClient).getAll();
 
     classesResult.when(
       onOk: (classes) {
@@ -47,8 +52,8 @@ class ClassListingViewModel {
 
   Future<void> getClassesSummaryByName(String name) async {
     state.isLoading = true;
-    final classes = await ClassDAO(databaseClient: SupabaseService.instance)
-        .getAllByName(name);
+    final classes =
+        await ClassDAO(databaseClient: databaseClient).getAllByName(name);
 
     classes.when(
       onOk: (classes) {
