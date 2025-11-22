@@ -103,6 +103,36 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
     );
   }
 
+  Future<Result<List<StudentDAOModel>, StudentDAOError>> getByName(
+    String name,
+  ) async {
+    StudentDAOError? daoError;
+
+    final response = await databaseClient.get(tableName).onError((error, _) {
+      daoError = StudentDAOError(
+        message: "Error fetching students from Supabase",
+        original: error,
+      );
+      return [];
+    });
+
+    if (daoError != null) {
+      return Result.error(daoError);
+    }
+
+    final students =
+        response.map((data) => StudentDAOModel.fromJson(data)).toList();
+    final filteredStudents = students
+        .where(
+          (data) => "${data.firstName} ${data.lastName}"
+              .toLowerCase()
+              .contains(name.toLowerCase()),
+        )
+        .toList();
+
+    return Result.ok(filteredStudents);
+  }
+
   // MARK: - Update
 
   @override

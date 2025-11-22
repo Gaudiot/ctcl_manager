@@ -4,6 +4,7 @@ import "package:ctcl_manager/core/variables/envs.dart";
 import "package:ctcl_manager/src/viewmodels/class_details.viewmodel.dart";
 import "package:ctcl_manager/src/viewmodels/class_listing.viewmodel.dart";
 import "package:ctcl_manager/src/viewmodels/create_class.viewmodel.dart";
+import "package:ctcl_manager/src/viewmodels/students_listing.viewmodel.dart";
 import "package:ctcl_manager/src/views/class_details.view.dart";
 import "package:ctcl_manager/src/views/class_listing.view.dart";
 import "package:ctcl_manager/src/views/create_class.view.dart";
@@ -12,6 +13,7 @@ import "package:ctcl_manager/src/views/students_listing.view.dart";
 import "package:ctcl_manager/src/views/viewstates/class_details.viewstate.dart";
 import "package:ctcl_manager/src/views/viewstates/class_listing.viewstate.dart";
 import "package:ctcl_manager/src/views/viewstates/create_class.viewstate.dart";
+import "package:ctcl_manager/src/views/viewstates/students_listing.viewstate.dart";
 import "package:flutter/material.dart";
 
 typedef RouteBuilder = Widget Function(BuildContext context);
@@ -70,7 +72,13 @@ class NavigationManager {
           ),
         );
       },
-      NavigationRoutes.studentsListing.path: (context) => StudentsListing(),
+      NavigationRoutes.studentsListing.path: (context) => StudentsListing(
+            viewModel: StudentsListingViewModel(
+              context,
+              state: StudentsListingViewState(students: []),
+              databaseClient: databaseClient,
+            ),
+          ),
     };
   }
 

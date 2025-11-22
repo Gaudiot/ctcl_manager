@@ -26,6 +26,8 @@
   "error_fetch_class_description": "There was an error fetching the class. Please try again later.",
   "error_fetch_classes_title": "Error fetching classes",
   "error_fetch_classes_description": "There was an error fetching the classes. Please try again later.",
+  "error_fetch_students_title": "Error fetching students",
+  "error_fetch_students_description": "There was an error fetching the students. Please try again later.",
   "error_fetch_locals_title": "Error fetching locals",
   "error_fetch_locals_description": "There was an error fetching the locals. Please try again later.",
   "error_create_class_title": "Error creating class",
