@@ -30,7 +30,7 @@ class ClassListingViewModel {
       onOk: (classes) {
         state.classes = classes
             .map(
-              (classSumary) => ClassSumary(
+              (classSumary) => ClassSummary(
                 id: classSumary.id,
                 name: classSumary.name,
                 local: "Lorem",
@@ -59,7 +59,7 @@ class ClassListingViewModel {
       onOk: (classes) {
         state.classes = classes
             .map(
-              (classSumary) => ClassSumary(
+              (classSumary) => ClassSummary(
                 id: classSumary.id,
                 name: classSumary.name,
                 local: "Ipsum",

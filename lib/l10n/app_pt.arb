@@ -26,6 +26,8 @@
   "error_fetch_class_description": "Houve um erro ao buscar a classe. Tente novamente mais tarde.",
   "error_fetch_classes_title": "Erro ao buscar classes",
   "error_fetch_classes_description": "Houve um erro ao buscar as classes. Tente novamente mais tarde.",
+  "error_fetch_students_title": "Erro ao buscar alunos",
+  "error_fetch_students_description": "Houve um erro ao buscar os alunos. Tente novamente mais tarde.",
   "error_fetch_locals_title": "Erro ao buscar locais",
   "error_fetch_locals_description": "Houve um erro ao buscar os locais. Tente novamente mais tarde.",
   "error_create_class_title": "Erro ao criar classe",

@@ -94,6 +94,13 @@ class AppLocalizationsPt extends AppLocalizations {
       'Houve um erro ao buscar as classes. Tente novamente mais tarde.';
 
   @override
+  String get error_fetch_students_title => 'Erro ao buscar alunos';
+
+  @override
+  String get error_fetch_students_description =>
+      'Houve um erro ao buscar os alunos. Tente novamente mais tarde.';
+
+  @override
   String get error_fetch_locals_title => 'Erro ao buscar locais';
 
   @override

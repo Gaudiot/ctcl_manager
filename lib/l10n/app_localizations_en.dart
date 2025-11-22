@@ -94,6 +94,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'There was an error fetching the classes. Please try again later.';
 
   @override
+  String get error_fetch_students_title => 'Error fetching students';
+
+  @override
+  String get error_fetch_students_description =>
+      'There was an error fetching the students. Please try again later.';
+
+  @override
   String get error_fetch_locals_title => 'Error fetching locals';
 
   @override
