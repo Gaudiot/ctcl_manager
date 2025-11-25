@@ -34,6 +34,9 @@ final class UIColors {
 
   /// MARK: - Yellow
 
+  static const Color primaryYellowDarkest = Color(0xFFFFAE00);
+  static const Color primaryYellowDarker = Color(0xFFFFB700);
+  static const Color primaryYellowDark = Color(0xFFFFC400);
   static const Color primaryYellow = Color(0xFFFFCC00);
   static const Color primaryYellowLight = Color(0xFFFFD60A);
   static const Color primaryYellowLighter = Color(0xFFFFE014);

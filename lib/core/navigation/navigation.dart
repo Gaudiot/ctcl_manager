@@ -8,6 +8,7 @@ import "package:ctcl_manager/src/viewmodels/students_listing.viewmodel.dart";
 import "package:ctcl_manager/src/views/class_details.view.dart";
 import "package:ctcl_manager/src/views/class_listing.view.dart";
 import "package:ctcl_manager/src/views/create_class.view.dart";
+import "package:ctcl_manager/src/views/create_student.view.dart";
 import "package:ctcl_manager/src/views/home.view.dart";
 import "package:ctcl_manager/src/views/students_listing.view.dart";
 import "package:ctcl_manager/src/views/viewstates/class_details.viewstate.dart";
@@ -21,6 +22,7 @@ typedef RouteBuilder = Widget Function(BuildContext context);
 enum NavigationRoutes {
   home("/home"),
   createClass("/create_class"),
+  createStudent("/create_student"),
   classListing("/class_listing"),
   classDetails("/class_details"),
   studentsListing("/students_listing");
@@ -79,6 +81,7 @@ class NavigationManager {
               databaseClient: databaseClient,
             ),
           ),
+      NavigationRoutes.createStudent.path: (context) => CreateStudentView(),
     };
   }
 

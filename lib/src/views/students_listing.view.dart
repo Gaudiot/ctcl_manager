@@ -63,7 +63,8 @@ class _StudentsListingState extends State<StudentsListing> {
                       foregroundColor: UIColors.primaryWhite,
                       shape: StadiumBorder(),
                     ),
-                    onPressed: () {},
+                    onPressed: () =>
+                        widget.viewModel.goToCreateStudent(context),
                     child: Text(context.strings.new_student),
                   ),
                 ),

@@ -1,5 +1,6 @@
 import "package:ctcl_manager/base/DAOs/student.dao.dart";
 import "package:ctcl_manager/core/database/interface.database.dart";
+import "package:ctcl_manager/core/navigation/navigation.dart";
 import "package:ctcl_manager/core/notifications/toast.dart";
 import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:ctcl_manager/src/views/viewstates/students_listing.viewstate.dart";
@@ -72,6 +73,18 @@ class StudentsListingViewModel {
           description: context.strings.error_fetch_students_description,
         );
         state.hasError = true;
+      },
+    );
+  }
+
+  // MARK: - Navigation
+
+  void goToCreateStudent(BuildContext context) {
+    NavigationManager.goToAndCallBack(
+      context,
+      NavigationRoutes.createStudent,
+      () {
+        getStudents();
       },
     );
   }

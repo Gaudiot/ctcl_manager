@@ -36,6 +36,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get create_class => 'Criar Turma';
 
   @override
+  String get create_student => 'Criar Aluno';
+
+  @override
   String get delete_class => 'Apagar Turma';
 
   @override
@@ -113,4 +116,19 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get error_create_class_description =>
       'Houve um erro ao criar a classe. Tente novamente mais tarde.';
+
+  @override
+  String get field_required => 'Este campo é obrigatório';
+
+  @override
+  String get invalid_date => 'Data inválida';
+
+  @override
+  String get invalid_instagram => 'Instagram inválido';
+
+  @override
+  String get invalid_email => 'Email inválido';
+
+  @override
+  String get invalid_name => 'Nome inválido';
 }

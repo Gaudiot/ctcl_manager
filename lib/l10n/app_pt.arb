@@ -8,6 +8,7 @@
   "class_name": "Nome da turma",
   "class_description": "Descrição da turma",
   "create_class": "Criar Turma",
+  "create_student": "Criar Aluno",
   "delete_class": "Apagar Turma",
   "invalid_class_name_empty": "Nome não pode ser vazio",
   "invalid_class_value_empty": "Valor não pode ser vazio",
@@ -31,5 +32,10 @@
   "error_fetch_locals_title": "Erro ao buscar locais",
   "error_fetch_locals_description": "Houve um erro ao buscar os locais. Tente novamente mais tarde.",
   "error_create_class_title": "Erro ao criar classe",
-  "error_create_class_description": "Houve um erro ao criar a classe. Tente novamente mais tarde."
+  "error_create_class_description": "Houve um erro ao criar a classe. Tente novamente mais tarde.",
+  "field_required": "Este campo é obrigatório",
+  "invalid_date": "Data inválida",
+  "invalid_instagram": "Instagram inválido",
+  "invalid_email": "Email inválido",
+  "invalid_name": "Nome inválido"
 }

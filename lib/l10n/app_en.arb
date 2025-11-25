@@ -8,6 +8,7 @@
   "class_name": "Class name",
   "class_description": "Class description",
   "create_class": "Create Class",
+  "create_student": "Create Student",
   "delete_class": "Delete Class",
   "invalid_class_name_empty": "Class name cannot be empty",
   "invalid_class_value_empty": "Class value cannot be empty",
@@ -31,5 +32,10 @@
   "error_fetch_locals_title": "Error fetching locals",
   "error_fetch_locals_description": "There was an error fetching the locals. Please try again later.",
   "error_create_class_title": "Error creating class",
-  "error_create_class_description": "There was an error creating the class. Please try again later."
+  "error_create_class_description": "There was an error creating the class. Please try again later.",
+  "field_required": "This field is required",
+  "invalid_date": "Invalid date",
+  "invalid_instagram": "Invalid Instagram",
+  "invalid_email": "Invalid email address",
+  "invalid_name": "Invalid name"
 }
