@@ -4,6 +4,7 @@ import "package:ctcl_manager/core/variables/envs.dart";
 import "package:ctcl_manager/src/viewmodels/class_details.viewmodel.dart";
 import "package:ctcl_manager/src/viewmodels/class_listing.viewmodel.dart";
 import "package:ctcl_manager/src/viewmodels/create_class.viewmodel.dart";
+import "package:ctcl_manager/src/viewmodels/create_student.viewmodel.dart";
 import "package:ctcl_manager/src/viewmodels/students_listing.viewmodel.dart";
 import "package:ctcl_manager/src/views/class_details.view.dart";
 import "package:ctcl_manager/src/views/class_listing.view.dart";
@@ -14,6 +15,7 @@ import "package:ctcl_manager/src/views/students_listing.view.dart";
 import "package:ctcl_manager/src/views/viewstates/class_details.viewstate.dart";
 import "package:ctcl_manager/src/views/viewstates/class_listing.viewstate.dart";
 import "package:ctcl_manager/src/views/viewstates/create_class.viewstate.dart";
+import "package:ctcl_manager/src/views/viewstates/create_student.viewstate.dart";
 import "package:ctcl_manager/src/views/viewstates/students_listing.viewstate.dart";
 import "package:flutter/material.dart";
 
@@ -81,7 +83,13 @@ class NavigationManager {
               databaseClient: databaseClient,
             ),
           ),
-      NavigationRoutes.createStudent.path: (context) => CreateStudentView(),
+      NavigationRoutes.createStudent.path: (context) => CreateStudentView(
+            viewModel: CreateStudentViewModel(
+              state: CreateStudentViewState(),
+              databaseClient: databaseClient,
+              context: context,
+            ),
+          ),
     };
   }
 

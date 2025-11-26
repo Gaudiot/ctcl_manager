@@ -25,7 +25,7 @@ final class StudentDAO implements BaseDAO<StudentDAOModel, StudentDAOError> {
       "last_name": data.lastName,
       "phone": data.phone,
       "email_address": data.emailAddress,
-      "birthday": data.birthday,
+      "birthday": data.birthday?.toIso8601String(),
       "instagram": data.instagram,
     }).onError((error, stackTrace) {
       daoError = StudentDAOError(

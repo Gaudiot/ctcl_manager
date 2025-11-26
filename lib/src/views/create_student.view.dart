@@ -2,10 +2,20 @@ import "package:ctcl_manager/base/components/ctcl_text_masks.dart";
 import "package:ctcl_manager/base/components/ctcl_textfield.component.dart";
 import "package:ctcl_manager/base/uicolors.dart";
 import "package:ctcl_manager/l10n/localizations_extension.dart";
+import "package:ctcl_manager/src/viewmodels/create_student.viewmodel.dart";
 import "package:flutter/material.dart";
 
 class CreateStudentView extends StatelessWidget {
-  const CreateStudentView({super.key});
+  final CreateStudentViewModel viewModel;
+
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController emailAddressController = TextEditingController();
+  final TextEditingController birthdayController = TextEditingController();
+  final TextEditingController instagramController = TextEditingController();
+
+  CreateStudentView({required this.viewModel, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +49,7 @@ class CreateStudentView extends StatelessWidget {
                 padding: EdgeInsets.all(16),
                 children: [
                   CtclTextField.required(
+                    controller: firstNameController,
                     labelText: "First Name",
                     hintText: "John",
                     validator: (value) {
@@ -50,6 +61,7 @@ class CreateStudentView extends StatelessWidget {
                   ),
                   SizedBox(height: 16),
                   CtclTextField.required(
+                    controller: lastNameController,
                     labelText: "Last Name",
                     hintText: "Doe",
                     validator: (value) {
@@ -61,6 +73,7 @@ class CreateStudentView extends StatelessWidget {
                   ),
                   SizedBox(height: 16),
                   CtclTextField.required(
+                    controller: phoneController,
                     labelText: "Phone number",
                     hintText: "(81) 98765-4321",
                     maskFormatter: CtclTextMasks.phoneMask,
@@ -77,6 +90,7 @@ class CreateStudentView extends StatelessWidget {
                   ),
                   SizedBox(height: 16),
                   CtclTextField.optional(
+                    controller: emailAddressController,
                     labelText: "Email address",
                     hintText: "email@example.com",
                     validator: (value) {
@@ -90,6 +104,7 @@ class CreateStudentView extends StatelessWidget {
                   ),
                   SizedBox(height: 16),
                   CtclTextField.optional(
+                    controller: birthdayController,
                     labelText: "Birthday",
                     hintText: "13/01/1999",
                     maskFormatter: CtclTextMasks.dateMask,
@@ -119,6 +134,7 @@ class CreateStudentView extends StatelessWidget {
                   ),
                   SizedBox(height: 16),
                   CtclTextField.optional(
+                    controller: instagramController,
                     labelText: "Instagram",
                     validator: (value) {
                       if (value.isEmpty) {
@@ -142,7 +158,16 @@ class CreateStudentView extends StatelessWidget {
                         foregroundColor: UIColors.primaryWhite,
                         shape: StadiumBorder(),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        viewModel.createStudent(
+                          firstName: firstNameController.text,
+                          lastName: lastNameController.text,
+                          phone: phoneController.text,
+                          emailAddress: emailAddressController.text,
+                          birthday: birthdayController.text,
+                          instagram: instagramController.text,
+                        );
+                      },
                       child: Text(context.strings.create_student),
                     ),
                   ),
