@@ -1,6 +1,8 @@
 import "package:ctcl_manager/base/DAOs/local.dao.dart";
+import "package:ctcl_manager/base/components/ctcl_textfield.component.dart";
 import "package:ctcl_manager/base/components/locals_dropdown.dart";
 import "package:ctcl_manager/base/uicolors.dart";
+import "package:ctcl_manager/core/design/components/input_formatter/input_formatter.dart";
 import "package:ctcl_manager/core/design/components/monetary_text_field.dart";
 import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:ctcl_manager/src/viewmodels/create_class.viewmodel.dart";
@@ -69,33 +71,23 @@ class _CreateClassViewState extends State<CreateClassView> {
                   return ListView(
                     padding: EdgeInsets.all(16),
                     children: [
-                      TextField(
+                      CtclTextField.required(
                         controller: classNameController,
-                        decoration: InputDecoration(
-                          labelText: context.strings.class_name,
-                          hintText: context.strings.class_name,
-                          border: OutlineInputBorder(),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: UIColors.primaryRed),
-                          ),
-                          errorText: widget.viewModel.state.nameField.isValid
-                              ? null
-                              : widget.viewModel.state.nameField.errorMessage,
-                        ),
+                        labelText: context.strings.class_name,
+                        hintText: context.strings.class_name,
                       ),
                       SizedBox(height: 16),
-                      TextField(
+                      CtclTextField.required(
                         controller: classDescriptionController,
-                        minLines: 3,
+                        labelText: context.strings.class_description,
+                        hintText: context.strings.class_description,
                         maxLines: 3,
-                        decoration: InputDecoration(
-                          labelText: context.strings.class_description,
-                          hintText: context.strings.class_description,
-                          border: OutlineInputBorder(),
-                        ),
                       ),
                       SizedBox(height: 16),
-                      MonetaryTextField(controller: classValueController),
+                      CtclTextField.required(
+                        labelText: "Value",
+                        inputFormatter: InputFormatter.currency,
+                      ),
                       SizedBox(height: 16),
                       LocalsDropdown(
                         localDAO: LocalDAO(

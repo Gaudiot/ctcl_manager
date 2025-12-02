@@ -1,6 +1,6 @@
-import "package:ctcl_manager/base/components/ctcl_text_masks.dart";
 import "package:ctcl_manager/base/components/ctcl_textfield.component.dart";
 import "package:ctcl_manager/base/uicolors.dart";
+import "package:ctcl_manager/core/design/components/input_formatter/input_formatter.dart";
 import "package:ctcl_manager/l10n/localizations_extension.dart";
 import "package:ctcl_manager/src/viewmodels/create_student.viewmodel.dart";
 import "package:flutter/material.dart";
@@ -76,7 +76,7 @@ class CreateStudentView extends StatelessWidget {
                     controller: phoneController,
                     labelText: "Phone number",
                     hintText: "(81) 98765-4321",
-                    maskFormatter: CtclTextMasks.phoneMask,
+                    inputFormatter: InputFormatter.phone,
                     validator: (value) {
                       if (value.isEmpty || value.length < 11) {
                         return null;
@@ -107,7 +107,7 @@ class CreateStudentView extends StatelessWidget {
                     controller: birthdayController,
                     labelText: "Birthday",
                     hintText: "13/01/1999",
-                    maskFormatter: CtclTextMasks.dateMask,
+                    inputFormatter: InputFormatter.date,
                     validator: (value) {
                       if (value.isEmpty || value.length < 8) {
                         return null;
